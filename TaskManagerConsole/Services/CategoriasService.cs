@@ -12,18 +12,18 @@ namespace TaskManagerConsole.Services
 
         public void CriarCategoria(Categoria categoria)
         {
-            var caminhoJson = File.ReadAllText("C:\\Users\\Sieg\\Documents\\alura\\TaskManagerConsole\\TaskManagerConsole\\bin\\Debug\\net10.0\\categoria.json");
+            var caminhoJson = File.ReadAllText("C:\\Users\\Usuario\\Documents\\programacao\\alura\\csharp\\Projetos\\DesafioTaskGerenciadorSieg\\TaskManagerConsole\\bin\\Debug\\net10.0\\categoria.json");
             var categorias = JsonConvert.DeserializeObject<List<Categoria>>(caminhoJson);
             categorias.Add(categoria);
             var categoriasString = JsonConvert.SerializeObject(categorias);
 
-            var path = Path.Combine("C:\\Users\\Sieg\\Documents\\alura\\TaskManagerConsole\\TaskManagerConsole\\bin\\Debug\\net10.0\\categoria.json");
+            var path = Path.Combine("C:\\Users\\Usuario\\Documents\\programacao\\alura\\csharp\\Projetos\\DesafioTaskGerenciadorSieg\\TaskManagerConsole\\bin\\Debug\\net10.0\\categoria.json");
             File.WriteAllText(path, categoriasString);
         }
 
         public List<Categoria> ListarCategoria()
         {
-            var caminhoJson = File.ReadAllText("C:\\Users\\Sieg\\Documents\\alura\\TaskManagerConsole\\TaskManagerConsole\\bin\\Debug\\net10.0\\categoria.json");
+            var caminhoJson = File.ReadAllText("C:\\Users\\Usuario\\Documents\\programacao\\alura\\csharp\\Projetos\\DesafioTaskGerenciadorSieg\\TaskManagerConsole\\bin\\Debug\\net10.0\\categoria.json");
             var categorias = JsonConvert.DeserializeObject<List<Categoria>>(caminhoJson);
 
             foreach (var item in categorias)

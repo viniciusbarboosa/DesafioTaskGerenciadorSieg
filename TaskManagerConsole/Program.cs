@@ -120,7 +120,7 @@ class Program{
                         Console.WriteLine("Data de Vencimento Invalida Insira outra (FORMATO ERRADO OU DATA JA PASSOU)");
                     }
                 }
-
+               
                 while (nomeCategoria == "" || nomeCategoria == null)
                 {
                     Console.WriteLine("LISTAGEM DE CATEGORIAS");
@@ -132,12 +132,17 @@ class Program{
                         Console.WriteLine($" [ {item.index} ] => {item.Value}");
                     }
 
+                    if (categorias.Count == 0)
+                    {
+                        break;
+                    }
+
                     Console.WriteLine("Escolha o id Da Categoria que quer selecionar");
                     int idCategoria = int.Parse(Console.ReadLine());
 
-                    if (categorias.Contains(categorias[idCategoria]))
+                    if (idCategoria < 0 || idCategoria >= categorias.Count)
                     {
-                        Console.WriteLine("Categoria Invalida Insira alguma com id Da lista");
+                        Console.WriteLine("Não possui essa categoria");
                     }
                     else
                     {
