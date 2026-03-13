@@ -1,4 +1,5 @@
 ﻿using TaskManagerConsole.Entities;
+using TaskManagerConsole.Repositories;
 using TaskManagerConsole.Services;
 
 class Program{
@@ -6,8 +7,10 @@ class Program{
     public static void Main(string[] args)
     {
         bool continuarAplicacao = true;
-        UsuarioService usuarioService = new UsuarioService();
-        CategoriasService categoriaService = new CategoriasService();
+
+        UsuarioService usuarioServices = new UsuarioService();
+        CategoriaService categoriaServices = new CategoriaService();
+        TarefaService tarefaServices = new TarefaService();
 
         
         while (continuarAplicacao) {
@@ -17,144 +20,83 @@ class Program{
             Console.Clear();
 
 
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("[1] Criar Um Usuário");
             Console.WriteLine("[2] Listar Usuarios");
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("[3] Criar Uma Categoria");
             Console.WriteLine("[4] Listar Categorias");
-            Console.WriteLine("[5] Criando Tarefas");
-            Console.WriteLine("[6]  Sair");
+            Console.WriteLine("[5] Deletar Categorias");
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("[6] Criando Tarefas");
+            Console.WriteLine("[7] Listar Tarefas");
+            Console.WriteLine("[8] Deletar Tarefas");
+            Console.WriteLine("[9] Editar Tarefas");
+            Console.WriteLine("[10] Marcar Tarefas Como Concluída");
+            Console.WriteLine("[11] Listar Tarefas Ordernadas Por Data de Vencimento");
+            Console.WriteLine("[12] Listar Tarefas Venceu");
+            Console.ResetColor();
+            
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("[13]  Sair");
+            Console.ResetColor();
 
 
             opcao = int.Parse(Console.ReadLine());
 
             if (opcao == 1)
             {
-                Console.WriteLine("Digite o nome do novo Usuário");
-                string usuario = Console.ReadLine();
-                Console.WriteLine("Digite o nome do email do novo Usuário");
-                string email = Console.ReadLine();
-
-                Usuario usuarioNovo = new Usuario();
-
-                usuarioNovo.Nome = usuario;
-                usuarioNovo.Email = email;
-
-                usuarioService.CriarUsuario(usuarioNovo);
-
-                Console.WriteLine("Usuário CRIADO COM SUCESSO");
-
+                usuarioServices.CriarUsuario();
             }
             else if (opcao == 2)
             {
-                Console.WriteLine("LISTAGEM DE USUÁRIOS");
-                Console.WriteLine("======================================");
-                usuarioService.ListarUsuario();
+                usuarioServices.ListarUsuarios();
             }
-            else  if(opcao == 3)
+            else if (opcao == 3)
             {
-                Console.WriteLine("Digite o nome da Categoria");
-                string nomeCategoria = Console.ReadLine();
-                Console.WriteLine("Digite a cor da Categoria");
-                string cor = Console.ReadLine();
-
-                Categoria categoria = new Categoria();
-                categoria.Nome = nomeCategoria;
-                categoria.Cor = cor;
-
-                categoriaService.CriarCategoria(categoria);
+                categoriaServices.criarCategoria();
             }
             else if (opcao == 4)
             {
-                Console.WriteLine("LISTAGEM DE CATEGORIAS");
-                Console.WriteLine("======================================");
-                categoriaService.ListarCategoria();
-            }else if (opcao == 5)
+                categoriaServices.listarCategorias();
+            }
+            else if (opcao == 5)
             {
-                Console.WriteLine("CRIANDO TAREFA");
-                Console.WriteLine("======================================");
-                string titulo = "";
-                string descricao = "";
-                string dataVencimentoString = "";
-                DateTime dataVencimento;
-                string nomeCategoria = "";
-
-                while(titulo == "" || titulo == null)
-                {
-                    Console.WriteLine("INSIRA Titulo da Tarefa ");
-                    titulo = Console.ReadLine();
-                    
-                    if(titulo == "" || titulo == null)
-                    {
-                        Console.WriteLine("Titulo não pode ser Vazio");
-                    }
-                }
-
-                while(descricao == "" || descricao == null)
-                {
-                    Console.WriteLine("INSIRA Descrição da Tarefa ");
-                    descricao = Console.ReadLine();
-
-                    if (descricao == "" || descricao == null)
-                    {
-                        Console.WriteLine("Descricao não pode ser Vazio");
-                    }
-                }
-
-                while (dataVencimentoString == "" || dataVencimentoString == null)
-                {
-                    try
-                    {
-                        Console.WriteLine("Insira Data de Vencimento");
-                        dataVencimentoString = Console.ReadLine();
-                        dataVencimento = DateTime.Parse(dataVencimentoString);
-                        Console.WriteLine(dataVencimento);
-                        if(dataVencimento < DateTime.Now)
-                        {
-                            Console.WriteLine("Data de Vencimento não pode ser no passado");
-                            dataVencimentoString = "";
-                        }
-
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("Data de Vencimento Invalida Insira outra (FORMATO ERRADO OU DATA JA PASSOU)");
-                    }
-                }
-               
-                while (nomeCategoria == "" || nomeCategoria == null)
-                {
-                    Console.WriteLine("LISTAGEM DE CATEGORIAS");
-                    Console.WriteLine("======================================");
-                    List<Categoria> categorias = categoriaService.ListarCategoria();
-                    
-                    foreach (var item in categorias.Select((x,i)=> new { Value = x,index = i}) )
-                    {
-                        Console.WriteLine($" [ {item.index} ] => {item.Value}");
-                    }
-
-                    if (categorias.Count == 0)
-                    {
-                        break;
-                    }
-
-                    Console.WriteLine("Escolha o id Da Categoria que quer selecionar");
-                    int idCategoria = int.Parse(Console.ReadLine());
-
-                    if (idCategoria < 0 || idCategoria >= categorias.Count)
-                    {
-                        Console.WriteLine("Não possui essa categoria");
-                    }
-                    else
-                    {
-                        nomeCategoria = categorias[idCategoria].Nome;
-                    }
-
-                }
-
-
-
+                categoriaServices.deletarCategoria();
             }
             else if (opcao == 6)
+            {
+                tarefaServices.createTarefa();
+            }
+            else if (opcao == 7)
+            {
+                tarefaServices.listarTarefas();
+            }
+            else if (opcao == 8)
+            {
+                tarefaServices.deletarTarefa();
+            }
+            else if (opcao == 9)
+            {
+                tarefaServices.updateTarefas();
+            }
+            else if (opcao == 10)
+            {
+                tarefaServices.listarTarefaConcluidas();
+            }
+            else if (opcao == 11)
+            {
+                tarefaServices.listarTarefasOrdenadasVencimento();
+            }
+            else if (opcao == 12)
+            {
+                tarefaServices.listarTarefasVencidas();
+            }
+            else if (opcao == 13)
             {
                 break;
             }

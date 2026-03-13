@@ -1,38 +1,51 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using TaskManagerConsole.Entities;
+using TaskManagerConsole.Repositories;
 
 namespace TaskManagerConsole.Services
 {
     public class UsuarioService
     {
-        public void CriarUsuario(Usuario usuario)
+        UsuarioRepository usuarioService = new UsuarioRepository();
+        CategoriasRepository categoriaService = new CategoriasRepository();
+        TarefasRepisitory tarefasService = new TarefasRepisitory();
+
+        public void CriarUsuario()
         {
-            var caminhoJson = File.ReadAllText("C:\\Users\\Usuario\\Documents\\programacao\\alura\\csharp\\Projetos\\DesafioTaskGerenciadorSieg\\TaskManagerConsole\\bin\\Debug\\net10.0\\usuario.json");
-            var usuarios = JsonConvert.DeserializeObject<List<Usuario>>(caminhoJson);
-            usuarios.Add(usuario);
-            var usuariosString = JsonConvert.SerializeObject(usuarios);
+            Console.WriteLine("Digite o nome do novo Usuário");
+            string usuario = Console.ReadLine();
+            Console.WriteLine("Digite o nome do email do novo Usuário");
+            string email = Console.ReadLine();
 
-            var path = Path.Combine("C:\\Users\\Usuario\\Documents\\programacao\\alura\\csharp\\Projetos\\DesafioTaskGerenciadorSieg\\TaskManagerConsole\\bin\\Debug\\net10.0\\usuario.json");
-            File.WriteAllText(path, usuariosString);
+            List<Usuario> usuarios = usuarioService.pegarUsuarios();
 
-        }
-
-        public List<Usuario> ListarUsuario()
-        {
-            var caminhoJson = File.ReadAllText("C:\\Users\\Usuario\\Documents\\programacao\\alura\\csharp\\Projetos\\DesafioTaskGerenciadorSieg\\TaskManagerConsole\\bin\\Debug\\net10.0\\usuario.json");
-            var usuarios = JsonConvert.DeserializeObject<List<Usuario>>(caminhoJson);
-            
-            foreach (var item in usuarios)
+            bool existeUsuario = false;
+            foreach (var item in usuarios.Select((x, i) => new { Value = x.Nome, index = i }))
             {
-                Console.WriteLine(item.Nome);
+                if (item.Value == usuario)
+                {
+                    Console.WriteLine("Não Possivel Criar Usuario Com Nome que ja existe");
+                    return;
+                }
             }
 
-            return usuarios;
+            Usuario usuarioNovo = new Usuario();
 
+            usuarioNovo.Nome = usuario;
+            usuarioNovo.Email = email;
+
+            usuarioService.CriarUsuario(usuarioNovo);
+
+            Console.WriteLine("Usuário CRIADO COM SUCESSO");
         }
 
+        public void ListarUsuarios()
+        {
+            Console.WriteLine("LISTAGEM DE USUÁRIOS");
+            Console.WriteLine("======================================");
+            usuarioService.ListarUsuario();
+        }
     }
 }
