@@ -8,29 +8,47 @@ namespace TaskManagerConsole.Repositories
 {
     public class TarefasRepisitory
     {
-        public void criarTarefa(Tarefa tarefa)
+        public void CriarTarefa(Tarefa tarefa)
         {
-            var caminhoJson = File.ReadAllText("C:\\Users\\Sieg\\Documents\\alura\\TaskManagerConsole\\TaskManagerConsole\\bin\\Debug\\net10.0\\tarefas.json");
+            var verificarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tarefas.json"); ;
+            if (!File.Exists(verificarPath))
+            {
+                File.WriteAllText(verificarPath, "[]");
+            }
+
+            var caminhoJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tarefas.json"));
             var tarefas = JsonConvert.DeserializeObject<List<Tarefa>>(caminhoJson);
             tarefas.Add(tarefa);
             var tarefasString = JsonConvert.SerializeObject(tarefas);
 
-            var path = Path.Combine("C:\\Users\\Sieg\\Documents\\alura\\TaskManagerConsole\\TaskManagerConsole\\bin\\Debug\\net10.0\\tarefas.json");
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tarefas.json");
             File.WriteAllText(path, tarefasString);
         }
 
-        public void atualizarTarefas(List<Tarefa> listaTarefas)
+        public void AtualizarTarefas(List<Tarefa> listaTarefas)
         {
-            var caminhoJson = File.ReadAllText("C:\\Users\\Sieg\\Documents\\alura\\TaskManagerConsole\\TaskManagerConsole\\bin\\Debug\\net10.0\\tarefas.json");
+            var verificarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tarefas.json"); ;
+            if (!File.Exists(verificarPath))
+            {
+                File.WriteAllText(verificarPath, "[]");
+            }
+
+            var caminhoJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tarefas.json"));
             var tarefasString = JsonConvert.SerializeObject(listaTarefas);
 
-            var path = Path.Combine("C:\\Users\\Sieg\\Documents\\alura\\TaskManagerConsole\\TaskManagerConsole\\bin\\Debug\\net10.0\\tarefas.json");
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tarefas.json");
             File.WriteAllText(path, tarefasString);
         }
 
         public List<Tarefa> ListarTarefa()
         {
-            var caminhoJson = File.ReadAllText("C:\\Users\\Sieg\\Documents\\alura\\TaskManagerConsole\\TaskManagerConsole\\bin\\Debug\\net10.0\\tarefas.json");
+            var verificarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tarefas.json"); ;
+            if (!File.Exists(verificarPath))
+            {
+                File.WriteAllText(verificarPath, "[]");
+            }
+
+            var caminhoJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tarefas.json"));
             var tarefas = JsonConvert.DeserializeObject<List<Tarefa>>(caminhoJson);
 
             foreach (var item in tarefas)
@@ -41,9 +59,15 @@ namespace TaskManagerConsole.Repositories
             return tarefas;
         }
 
-        public List<Tarefa> pegarTarefas()
+        public List<Tarefa> PegarTarefas()
         {
-            var caminhoJson = File.ReadAllText("C:\\Users\\Sieg\\Documents\\alura\\TaskManagerConsole\\TaskManagerConsole\\bin\\Debug\\net10.0\\tarefas.json");
+            var verificarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tarefas.json"); ;
+            if (!File.Exists(verificarPath))
+            {
+                File.WriteAllText(verificarPath, "[]");
+            }
+
+            var caminhoJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tarefas.json"));
             var tarefas = JsonConvert.DeserializeObject<List<Tarefa>>(caminhoJson);
             return tarefas;
         }

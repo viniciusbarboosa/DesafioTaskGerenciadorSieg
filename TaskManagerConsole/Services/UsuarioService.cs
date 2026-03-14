@@ -19,7 +19,7 @@ namespace TaskManagerConsole.Services
             Console.WriteLine("Digite o nome do email do novo Usuário");
             string email = Console.ReadLine();
 
-            List<Usuario> usuarios = usuarioService.pegarUsuarios();
+            List<Usuario> usuarios = usuarioService.PegarUsuarios();
 
             bool existeUsuario = false;
             foreach (var item in usuarios.Select((x, i) => new { Value = x.Nome, index = i }))

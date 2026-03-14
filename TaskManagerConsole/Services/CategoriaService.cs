@@ -38,7 +38,7 @@ namespace TaskManagerConsole.Services
             //DELETAR CATEGORIA
             Console.WriteLine("LISTAGEM DE CATEGORIAS");
             Console.WriteLine("======================================");
-            List<Tarefa> tarefas = tarefasService.pegarTarefas();
+            List<Tarefa> tarefas = tarefasService.PegarTarefas();
             List<Categoria> categorias = categoriaService.pegarCategorias();
 
             if (categorias.Count == 0)
@@ -76,7 +76,7 @@ namespace TaskManagerConsole.Services
 
 
             categorias.RemoveAt(idEscolha);
-            categoriaService.atualizarCategoria(categorias);
+            categoriaService.AtualizarCategoria(categorias);
         }
 
     }
