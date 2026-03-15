@@ -1,6 +1,7 @@
 ﻿using TaskManagerConsole.Entities;
 using TaskManagerConsole.Repositories;
 using TaskManagerConsole.Services;
+using TaskManagerConsole.Views;
 
 class Program{
 
@@ -17,68 +18,68 @@ class Program{
 
             int opcao = 99;
 
-            Console.Clear();
-
-
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("[1] Criar Um Usuário");
-            Console.WriteLine("[2] Listar Usuarios");
-            Console.ResetColor();
-
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("[3] Criar Uma Categoria");
-            Console.WriteLine("[4] Listar Categorias");
-            Console.WriteLine("[5] Deletar Categorias");
-            Console.ResetColor();
-
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("[6] Criando Tarefas");
-            Console.WriteLine("[7] Listar Tarefas");
-            Console.WriteLine("[8] Deletar Tarefas");
-            Console.WriteLine("[9] Editar Tarefas");
-            Console.WriteLine("[10] Marcar Tarefas Como Concluída");
-            Console.WriteLine("[11] Listar Tarefas Ordernadas Por Data de Vencimento");
-            Console.WriteLine("[12] Listar Tarefas Venceu");
-            Console.ResetColor();
-            
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.WriteLine("[13]  Sair");
-            Console.ResetColor();
-
+            Menu.MostrarMenu();
 
             opcao = int.Parse(Console.ReadLine());
+
+            switch (opcao)
+            {
+                case 1:
+                    usuarioServices.CriarUsuario();
+                    break;
+                case 2:
+                    usuarioServices.ListarUsuarios();
+                    break;
+                case 3:
+                    categoriaServices.criarCategoria();
+                    break;
+                case 4:
+                    categoriaServices.listarCategorias();
+                    break;
+                case 5:
+                    categoriaServices.deletarCategoria();
+                    break;
+                case 6:
+                    tarefaServices.createTarefa();
+                    break;
+                case 7:
+                    tarefaServices.listarTarefas();
+                    break;
+                case 8:
+                    tarefaServices.deletarTarefa();
+                    break;
+                case 
+
+
+            }
+
+               
+            
 
             if (opcao == 1)
             {
                 usuarioServices.CriarUsuario();
             }
-            else if (opcao == 2)
-            {
-                usuarioServices.ListarUsuarios();
-            }
-            else if (opcao == 3)
-            {
-                categoriaServices.criarCategoria();
-            }
+            
             else if (opcao == 4)
             {
-                categoriaServices.listarCategorias();
+                
             }
             else if (opcao == 5)
             {
-                categoriaServices.deletarCategoria();
+                
             }
             else if (opcao == 6)
             {
-                tarefaServices.createTarefa();
+                
             }
             else if (opcao == 7)
             {
-                tarefaServices.listarTarefas();
+                
             }
             else if (opcao == 8)
             {
-                tarefaServices.deletarTarefa();
+                
             }
             else if (opcao == 9)
             {
