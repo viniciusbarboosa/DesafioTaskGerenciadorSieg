@@ -30,10 +30,12 @@ namespace TaskManagerConsole.Views
             Console.WriteLine("[10] Marcar Tarefas Como Concluída");
             Console.WriteLine("[11] Listar Tarefas Ordernadas Por Data de Vencimento");
             Console.WriteLine("[12] Listar Tarefas Venceu");
+            Console.WriteLine("[13] Listar Tarefas Filtradas por Status");
+            Console.WriteLine("[14] Listar Tarefas Filtradas por Categoria");
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.WriteLine("[13]  Sair");
+            Console.WriteLine("[15]  Sair");
             Console.ResetColor();
         }
     }

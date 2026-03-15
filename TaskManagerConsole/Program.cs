@@ -58,7 +58,7 @@ class Program{
                     tarefaServices.UpdateTarefas();
                     break;
                 case 10:
-                    tarefaServices.ListarTarefaConcluidas();
+                    tarefaServices.ListarTarefaMarcarConcluida();
                     break;
                 case 11:
                     tarefaServices.ListarTarefasOrdenadasVencimento();
@@ -67,6 +67,12 @@ class Program{
                     tarefaServices.ListarTarefasVencidas();
                     break;
                 case 13:
+                    tarefaServices.FiltrarTarefasPorStatus();
+                    break;
+                case 14:
+                    tarefaServices.FiltrarTarefasPorCategoria();
+                    break;
+                case 15:
                     continuarAplicacao = false;
                     break;
                 default:

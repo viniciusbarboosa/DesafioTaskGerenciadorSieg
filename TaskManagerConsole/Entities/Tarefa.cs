@@ -18,6 +18,7 @@ namespace TaskManagerConsole.Entities
         public string Descricao { get; set; }
         public DateTime DataCriacao { get; set; }
         public DateTime DataVencimento { get; set; }
+        public DateTime DataConclusao { get; set; }
         public StatusTarefa Status { get; set; }
         public string NomeCategoria { get; set; }
         public string NomeUsuario { get; set; }

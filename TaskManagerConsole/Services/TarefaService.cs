@@ -22,6 +22,21 @@ namespace TaskManagerConsole.Services
 
         public void CreateTarefa()
         {
+            List<Categoria> categoriasVerificacao = _categoriaRepository.PegarCategorias();
+            List<Usuario> usuariosVerificacao = _usuarioRepository.PegarUsuarios();
+
+            if (categoriasVerificacao.Count == 0)
+            {
+                Console.WriteLine("Não é possivel Criar Tarefa sem ter pelo menos 1 categoria Criada");
+                return;
+            }
+
+            if (usuariosVerificacao.Count == 0)
+            {
+                Console.WriteLine("Não é possivel Criar Tarefa sem ter pelo menos 1 usuario Criado");
+                return;
+            }
+
             //CREATE TAREFA
             Console.WriteLine("CRIANDO TAREFA");
             Console.WriteLine("======================================");
@@ -72,6 +87,7 @@ namespace TaskManagerConsole.Services
                 catch (Exception e)
                 {
                     Console.WriteLine("Data de Vencimento Invalida Insira outra (FORMATO ERRADO OU DATA JA PASSOU)");
+                    dataVencimentoString = "";
                 }
             }
 
@@ -89,6 +105,7 @@ namespace TaskManagerConsole.Services
 
                 if (categorias.Count == 0)
                 {
+                    Console.WriteLine("NÃO É POSSIVEL CRIAR UMA TAREFA SEM CATEGORIAS CRIADA");
                     return;
                 }
 
@@ -114,6 +131,7 @@ namespace TaskManagerConsole.Services
 
                 if (usuarios.Count == 0)
                 {
+                    Console.WriteLine("NÃO É POSSIVEL CRIAR UMA TAREFA SEM USUARIOS CRIADOS");
                     return;
                 }
 
@@ -143,6 +161,7 @@ namespace TaskManagerConsole.Services
             tarefa.DataVencimento = DateTime.Parse(dataVencimentoString);
             tarefa.NomeCategoria = nomeCategoria;
             tarefa.NomeUsuario = nomeUsuario;
+            tarefa.Status = StatusTarefa.Pendente;
 
             _tarefasRepository.CriarTarefa(tarefa);
         }
@@ -153,10 +172,19 @@ namespace TaskManagerConsole.Services
             Console.WriteLine("=================================");
             List<Tarefa> tarefas = _tarefasRepository.PegarTarefas();
 
-            foreach (var item in tarefas.Select((x, i) => new { Titulo = x.Titulo, Descricao = x.Descricao, DataVencimento = x.DataVencimento, DataCriacao = x.DataCriacao, Status = x.Status, NomeUsuario = x.NomeUsuario, NomeCategoria = x.NomeCategoria, index = i }))
+            foreach (var item in tarefas.Select((x, i) => new { Titulo = x.Titulo, Descricao = x.Descricao, DataVencimento = x.DataVencimento, DataCriacao = x.DataCriacao,DataConslusao = x.DataConclusao , Status = x.Status, NomeUsuario = x.NomeUsuario, NomeCategoria = x.NomeCategoria, index = i }))
             {
-                Console.WriteLine($" Id:{item.index} = TITULO : {item.Titulo} | DESCRICAO : {item.Descricao} | DATA VENCIMENTO : {item.DataVencimento} | DATA CRIAÇÃO {item.DataCriacao} | STATUS : {item.Status} | CATEGORIA : {item.NomeCategoria} | RESPONSAVEL : {item.NomeUsuario}");
-                Console.WriteLine("========================================");
+                if (item.Status == StatusTarefa.Concluida)
+                {
+                    Console.WriteLine($" Id:{item.index} = TITULO : {item.Titulo} | DESCRICAO : {item.Descricao} | DATA VENCIMENTO : {item.DataVencimento} | DATA CRIAÇÃO {item.DataCriacao} | DATA COnCLUSAO {item.DataConslusao} |STATUS : {item.Status} | CATEGORIA : {item.NomeCategoria} | RESPONSAVEL : {item.NomeUsuario}");
+                    Console.WriteLine("========================================");
+                }
+                else
+                {
+                    Console.WriteLine($" Id:{item.index} = TITULO : {item.Titulo} | DESCRICAO : {item.Descricao} | DATA VENCIMENTO : {item.DataVencimento} | DATA CRIAÇÃO {item.DataCriacao} | STATUS : {item.Status} | CATEGORIA : {item.NomeCategoria} | RESPONSAVEL : {item.NomeUsuario}");
+                    Console.WriteLine("========================================");
+                }
+                
             }
 
         }
@@ -363,12 +391,11 @@ namespace TaskManagerConsole.Services
             tarefaEditando.DataVencimento = DateTime.Parse(dataVencimentoString);
             tarefaEditando.NomeCategoria = nomeCategoria;
             tarefaEditando.NomeUsuario = nomeUsuario;
-            tarefaEditando.DataCriacao = DateTime.Now;
 
             _tarefasRepository.AtualizarTarefas(tarefas);
         }
 
-        public void ListarTarefaConcluidas()
+        public void ListarTarefaMarcarConcluida()
         {
             Console.WriteLine("LISTAGEM DE TAREFAS");
             Console.WriteLine("=================================");
@@ -385,6 +412,7 @@ namespace TaskManagerConsole.Services
 
             Tarefa tarefaEditando = tarefas[idEscolhido];
             tarefaEditando.Status = StatusTarefa.Concluida;
+            tarefaEditando.DataConclusao = DateTime.Now;
 
             _tarefasRepository.AtualizarTarefas(tarefas);
         }
@@ -419,11 +447,126 @@ namespace TaskManagerConsole.Services
                 .Where(i => i.Status != StatusTarefa.Concluida)
                 .ToList();
 
-            foreach (var item in novaLista.Select((x, i) => new { Titulo = x.Titulo, Descricao = x.Descricao, DataVencimento = x.DataVencimento, DataCriacao = x.DataCriacao, Status = x.Status, NomeUsuario = x.NomeUsuario, NomeCategoria = x.NomeCategoria, index = i }))
+            foreach (var item in novaLista.Select((x, i) => new { Titulo = x.Titulo, Descricao = x.Descricao, DataVencimento = x.DataVencimento, DataCriacao = x.DataCriacao,DataConclusao = x.DataConclusao , Status = x.Status, NomeUsuario = x.NomeUsuario, NomeCategoria = x.NomeCategoria, index = i }))
+            {
+                Console.WriteLine($" Id:{item.index} = TITULO : {item.Titulo} | DESCRICAO : {item.Descricao} | DATA VENCIMENTO : {item.DataVencimento} | DATA CRIAÇÃO {item.DataCriacao} | Data Conclusao : {item.DataConclusao} |STATUS : {item.Status} | CATEGORIA : {item.NomeCategoria} | RESPONSAVEL : {item.NomeUsuario}");
+                Console.WriteLine("-------------------------------------");
+            }
+        }
+
+        public void FiltrarTarefasPorStatus()
+        {
+            List<Tarefa> tarefas = _tarefasRepository.PegarTarefas();
+
+            Console.WriteLine($"ESCOLHA O STATUS QUE DESEJA FILTRAR");
+            Console.WriteLine("[ 1 ] - Pendente");
+            Console.WriteLine("[ 2 ] - Em Andamento");
+            Console.WriteLine("[ 3 ] Cancelada");
+            Console.WriteLine("[ 4 ] Concluida");
+
+            int statusEscolhido;
+            Console.WriteLine(" Escolha o id da Tarefa que deseja Marcar como concluída");
+            while(!int.TryParse(Console.ReadLine(),out statusEscolhido))
+            {
+                Console.WriteLine("Apenas Permitido Numeros Inteiros");
+            }
+
+            if(statusEscolhido > 4 || statusEscolhido <= 0)
+            {
+                Console.WriteLine("Opção Inválida");
+                return;
+            }
+
+            StatusTarefa statusTarefa = StatusTarefa.Pendente;
+            if (statusEscolhido == 1)
+            {
+                statusTarefa = StatusTarefa.Pendente;
+            }else if (statusEscolhido == 2)
+            {
+                statusTarefa = StatusTarefa.EmAndamento;
+            }else if (statusEscolhido == 3)
+            {
+                statusTarefa = StatusTarefa.Cancelada;
+            }else if (statusEscolhido == 4)
+            {
+                statusTarefa = StatusTarefa.Concluida;
+            }
+
+            var listaTarefasFiltrada = tarefas
+                                       .Where(i => i.Status == statusTarefa)
+                                       .ToList();
+
+            foreach (var item in listaTarefasFiltrada.Select((x, i) => new { Titulo = x.Titulo, Descricao = x.Descricao, DataVencimento = x.DataVencimento, DataCriacao = x.DataCriacao, DataConclusao = x.DataConclusao , Status = x.Status, NomeUsuario = x.NomeUsuario, NomeCategoria = x.NomeCategoria, index = i }))
+            {
+                if(statusEscolhido == 4)
+                {
+                    Console.WriteLine($" Id:{item.index} = TITULO : {item.Titulo} | DESCRICAO : {item.Descricao} | DATA VENCIMENTO : {item.DataVencimento} | DATA CRIAÇÃO {item.DataCriacao} | DATA CONCLUSAO {item.DataConclusao}| STATUS : {item.Status} | CATEGORIA : {item.NomeCategoria} | RESPONSAVEL : {item.NomeUsuario}");
+                    Console.WriteLine("-------------------------------------");
+                }
+                else
+                {
+                    Console.WriteLine($" Id:{item.index} = TITULO : {item.Titulo} | DESCRICAO : {item.Descricao} | DATA VENCIMENTO : {item.DataVencimento} | DATA CRIAÇÃO {item.DataCriacao} | STATUS : {item.Status} | CATEGORIA : {item.NomeCategoria} | RESPONSAVEL : {item.NomeUsuario}");
+                    Console.WriteLine("-------------------------------------");
+                }
+                
+            }
+
+        }
+
+        public void FiltrarTarefasPorCategoria()
+        {
+            string nomeCategoria = "";
+            while (nomeCategoria == "" || nomeCategoria == null)
+            {
+                Console.WriteLine("LISTAGEM DE CATEGORIAS");
+                Console.WriteLine("======================================");
+                List<Categoria> categorias = _categoriaRepository.PegarCategorias();
+
+
+                foreach (var item in categorias.Select((x, i) => new { Value = x.Nome, index = i }))
+                {
+                    Console.WriteLine($" [ {item.index} ] => {item.Value}");
+                }
+
+                if (categorias.Count == 0)
+                {
+                    Console.WriteLine("Não existe Categorias");
+                    break;
+                }
+
+                Console.WriteLine($"Escolha o id Da Categoria que quer selecionar para Filtrar");
+                int idCategoria;
+                while (!int.TryParse(Console.ReadLine(),out idCategoria))
+                {
+                    Console.WriteLine($"Invalido pode apenas escolher Números");
+                }
+
+                if (idCategoria < 0 || idCategoria >= categorias.Count)
+                {
+                    Console.WriteLine("Não possui essa categoria");
+                }
+                else
+                {
+                    nomeCategoria = categorias[idCategoria].Nome;
+                }
+
+            }
+
+            List<Tarefa> tarefas = _tarefasRepository.PegarTarefas();
+
+            List<Tarefa> tarefasFiltradas;
+
+            tarefasFiltradas = tarefas
+                               .Where(i => i.NomeCategoria == nomeCategoria)
+                               .ToList();
+
+            foreach (var item in tarefasFiltradas.Select((x, i) => new { Titulo = x.Titulo, Descricao = x.Descricao, DataVencimento = x.DataVencimento, DataCriacao = x.DataCriacao, Status = x.Status, NomeUsuario = x.NomeUsuario, NomeCategoria = x.NomeCategoria, index = i }))
             {
                 Console.WriteLine($" Id:{item.index} = TITULO : {item.Titulo} | DESCRICAO : {item.Descricao} | DATA VENCIMENTO : {item.DataVencimento} | DATA CRIAÇÃO {item.DataCriacao} | STATUS : {item.Status} | CATEGORIA : {item.NomeCategoria} | RESPONSAVEL : {item.NomeUsuario}");
                 Console.WriteLine("-------------------------------------");
             }
+
         }
+
     }
 }

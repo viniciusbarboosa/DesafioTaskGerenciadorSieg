@@ -22,8 +22,27 @@ namespace TaskManagerConsole.Services
         {
             Console.WriteLine("Digite o nome da Categoria");
             string nomeCategoria = Console.ReadLine();
+            
+            bool disponivel= true;
+            List<Categoria> categorias = _categoriaRepository.PegarCategorias();
+            foreach (var item in categorias.Select((x, i) => new { Value = x.Nome, index = i }))
+            {
+                if(item.Value == nomeCategoria)
+                {
+                    disponivel = false;
+                }
+            }
+
+            if(disponivel == false)
+            {
+                Console.WriteLine("Nome de Categoria Já existe não e possivel criar");
+                return;
+            }
+
             Console.WriteLine("Digite a cor da Categoria");
             string cor = Console.ReadLine();
+
+            
 
             Categoria categoria = new Categoria();
             categoria.Nome = nomeCategoria;
