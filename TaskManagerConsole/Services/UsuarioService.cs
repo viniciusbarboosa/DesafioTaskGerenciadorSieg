@@ -20,6 +20,12 @@ namespace TaskManagerConsole.Services
             string usuario = Console.ReadLine();
             Console.WriteLine("Digite o nome do email do novo Usuário");
             string email = Console.ReadLine();
+            
+            if (!(email.Contains("@gmail.com") || email.Contains("@hotmail.com") || email.Contains("@sieg.com")))
+            {
+                Console.WriteLine("Email inválido");
+                return;
+            }
 
             List<Usuario> usuarios = _usuarioRepository.PegarUsuarios();
 

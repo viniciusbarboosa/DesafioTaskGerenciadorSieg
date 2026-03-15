@@ -23,8 +23,10 @@ class Program{
             int opcao = 99;
 
             Menu.MostrarMenu();
-
-            opcao = int.Parse(Console.ReadLine());
+            while(!int.TryParse(Console.ReadLine(), out opcao))
+            {
+                Console.WriteLine("Digite um Valor Valido (Apenas Numeros Inteiros)");
+            }
 
             switch (opcao)
             {
