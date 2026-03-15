@@ -9,9 +9,14 @@ namespace TaskManagerConsole.Services
 
     public class CategoriaService
     {
-        UsuarioRepository usuarioService = new UsuarioRepository();
-        CategoriasRepository categoriaService = new CategoriasRepository();
-        TarefasRepisitory tarefasService = new TarefasRepisitory();
+        CategoriasRepository _categoriaRepository = new CategoriasRepository();
+        TarefasRepository _tarefasRepository = new TarefasRepository();
+
+        public CategoriaService(CategoriasRepository categoriasRepository,TarefasRepository tarefasRepisitory)
+        {
+            _categoriaRepository = categoriasRepository;
+            _tarefasRepository = tarefasRepisitory;
+        }
 
         public void CriarCategoria()
         {
@@ -24,13 +29,13 @@ namespace TaskManagerConsole.Services
             categoria.Nome = nomeCategoria;
             categoria.Cor = cor;
 
-            categoriaService.CriarCategoria(categoria);
+            _categoriaRepository.CriarCategoria(categoria);
         }
 
         public void ListarCategorias() {
             Console.WriteLine("LISTAGEM DE CATEGORIAS");
             Console.WriteLine("======================================");
-            List<Categoria> categorias = categoriaService.PegarCategorias();
+            List<Categoria> categorias = _categoriaRepository.PegarCategorias();
 
             foreach (var item in categorias.Select((x, i) => new { Nome = x.Nome,Cor = x.Cor, index = i }))
             {
@@ -43,8 +48,8 @@ namespace TaskManagerConsole.Services
             //DELETAR CATEGORIA
             Console.WriteLine("LISTAGEM DE CATEGORIAS");
             Console.WriteLine("======================================");
-            List<Tarefa> tarefas = tarefasService.PegarTarefas();
-            List<Categoria> categorias = categoriaService.PegarCategorias();
+            List<Tarefa> tarefas = _tarefasRepository.PegarTarefas();
+            List<Categoria> categorias = _categoriaRepository.PegarCategorias();
 
             if (categorias.Count == 0)
             {
@@ -81,7 +86,7 @@ namespace TaskManagerConsole.Services
 
 
             categorias.RemoveAt(idEscolha);
-            categoriaService.AtualizarCategoria(categorias);
+            _categoriaRepository.AtualizarCategoria(categorias);
         }
 
     }

@@ -8,10 +8,12 @@ namespace TaskManagerConsole.Services
 {
     public class UsuarioService
     {
-        UsuarioRepository usuarioService = new UsuarioRepository();
-        CategoriasRepository categoriaService = new CategoriasRepository();
-        TarefasRepisitory tarefasService = new TarefasRepisitory();
+        UsuarioRepository _usuarioRepository = new UsuarioRepository();
 
+        public UsuarioService(UsuarioRepository usuarioRepository)
+        {
+            _usuarioRepository = usuarioRepository; 
+        }
         public void CriarUsuario()
         {
             Console.WriteLine("Digite o nome do novo Usuário");
@@ -19,7 +21,7 @@ namespace TaskManagerConsole.Services
             Console.WriteLine("Digite o nome do email do novo Usuário");
             string email = Console.ReadLine();
 
-            List<Usuario> usuarios = usuarioService.PegarUsuarios();
+            List<Usuario> usuarios = _usuarioRepository.PegarUsuarios();
 
             bool existeUsuario = false;
             foreach (var item in usuarios.Select((x, i) => new { Value = x.Nome, index = i }))
@@ -36,7 +38,7 @@ namespace TaskManagerConsole.Services
             usuarioNovo.Nome = usuario;
             usuarioNovo.Email = email;
 
-            usuarioService.CriarUsuario(usuarioNovo);
+            _usuarioRepository.CriarUsuario(usuarioNovo);
 
             Console.WriteLine("Usuário CRIADO COM SUCESSO");
         }
@@ -45,7 +47,7 @@ namespace TaskManagerConsole.Services
         {
             Console.WriteLine("LISTAGEM DE USUÁRIOS");
             Console.WriteLine("======================================");
-            var usuarios = usuarioService.PegarUsuarios();
+            var usuarios = _usuarioRepository.PegarUsuarios();
             foreach (var item in usuarios.Select((x, i) => new { Nome = x.Nome, Email = x.Email, index = i }))
             {
                 Console.WriteLine($" {item.Nome} - Email : {item.Email}");

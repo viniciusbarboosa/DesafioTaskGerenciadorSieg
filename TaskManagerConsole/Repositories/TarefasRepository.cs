@@ -7,7 +7,7 @@ using TaskManagerConsole.Helpers;
 
 namespace TaskManagerConsole.Repositories
 {
-    public class TarefasRepisitory
+    public class TarefasRepository
     {
         public void CriarTarefa(Tarefa tarefa)
         {

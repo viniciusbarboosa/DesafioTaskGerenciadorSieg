@@ -9,9 +9,13 @@ class Program{
     {
         bool continuarAplicacao = true;
 
-        UsuarioService usuarioServices = new UsuarioService();
-        CategoriaService categoriaServices = new CategoriaService();
-        TarefaService tarefaServices = new TarefaService();
+        UsuarioRepository usuarioRepository = new UsuarioRepository();
+        CategoriasRepository categoriasRepository = new CategoriasRepository();
+        TarefasRepository tarefasRepository = new TarefasRepository();
+
+        UsuarioService usuarioServices = new UsuarioService(usuarioRepository);
+        CategoriaService categoriaServices = new CategoriaService(categoriasRepository,tarefasRepository);
+        TarefaService tarefaServices = new TarefaService(usuarioRepository,categoriasRepository,tarefasRepository);
 
         
         while (continuarAplicacao) {
