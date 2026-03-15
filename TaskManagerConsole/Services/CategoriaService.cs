@@ -13,7 +13,7 @@ namespace TaskManagerConsole.Services
         CategoriasRepository categoriaService = new CategoriasRepository();
         TarefasRepisitory tarefasService = new TarefasRepisitory();
 
-        public void criarCategoria()
+        public void CriarCategoria()
         {
             Console.WriteLine("Digite o nome da Categoria");
             string nomeCategoria = Console.ReadLine();
@@ -27,19 +27,24 @@ namespace TaskManagerConsole.Services
             categoriaService.CriarCategoria(categoria);
         }
 
-        public void listarCategorias() {
+        public void ListarCategorias() {
             Console.WriteLine("LISTAGEM DE CATEGORIAS");
             Console.WriteLine("======================================");
-            categoriaService.ListarCategoria();
+            List<Categoria> categorias = categoriaService.PegarCategorias();
+
+            foreach (var item in categorias.Select((x, i) => new { Nome = x.Nome,Cor = x.Cor, index = i }))
+            {
+                Console.WriteLine($" [ {item.index} ] => {item.Nome} | COR {item.Cor}");
+            }
         }
 
-        public void deletarCategoria()
+        public void DeletarCategoria()
         {
             //DELETAR CATEGORIA
             Console.WriteLine("LISTAGEM DE CATEGORIAS");
             Console.WriteLine("======================================");
             List<Tarefa> tarefas = tarefasService.PegarTarefas();
-            List<Categoria> categorias = categoriaService.pegarCategorias();
+            List<Categoria> categorias = categoriaService.PegarCategorias();
 
             if (categorias.Count == 0)
             {

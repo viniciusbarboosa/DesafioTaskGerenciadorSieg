@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using TaskManagerConsole.Entities;
+using TaskManagerConsole.Helpers;
 
 namespace TaskManagerConsole.Repositories
 {
@@ -12,65 +13,17 @@ namespace TaskManagerConsole.Repositories
 
         public void CriarCategoria(Categoria categoria)
         {
-            var verificarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "categoria.json"); ;
-            if (!File.Exists(verificarPath))
-            {
-                File.WriteAllText(verificarPath, "[]");
-            }
-
-            var caminhoJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "categoria.json"));
-            var categorias = JsonConvert.DeserializeObject<List<Categoria>>(caminhoJson);
-            categorias.Add(categoria);
-            var categoriasString = JsonConvert.SerializeObject(categorias);
-
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "categoria.json");
-            File.WriteAllText(path, categoriasString);
+            FuncoesCategorias.EscreverArquivoCategorias(categoria);
         }
 
-        public void AtualizarCategoria(List<Categoria> listaTarefas)
+        public void AtualizarCategoria(List<Categoria> listaCategorias)
         {
-            var verificarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "categoria.json"); ;
-            if (!File.Exists(verificarPath))
-            {
-                File.WriteAllText(verificarPath, "[]");
-            }
-
-            var caminhoJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "categoria.json"));
-            var tarefasString = JsonConvert.SerializeObject(listaTarefas);
-
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "categoria.json");
-            File.WriteAllText(path, tarefasString);
+            FuncoesCategorias.AtualizarArquvioCategorias(listaCategorias);
         }
 
-        public List<Categoria> ListarCategoria()
+        public List<Categoria> PegarCategorias()
         {
-            var verificarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "categoria.json"); ;
-            if (!File.Exists(verificarPath))
-            {
-                File.WriteAllText(verificarPath, "[]");
-            }
-
-            var caminhoJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "categoria.json"));
-            var categorias = JsonConvert.DeserializeObject<List<Categoria>>(caminhoJson);
-
-            foreach (var item in categorias)
-            {
-                Console.WriteLine(item.Nome);
-            }
-
-            return categorias;
-        }
-
-        public List<Categoria> pegarCategorias()
-        {
-            var verificarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "categoria.json"); ;
-            if (!File.Exists(verificarPath))
-            {
-                File.WriteAllText(verificarPath, "[]");
-            }
-
-            var caminhoJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "categoria.json"));
-            var categorias = JsonConvert.DeserializeObject<List<Categoria>>(caminhoJson);
+            var categorias = FuncoesCategorias.PegarCategoriasArquivo();
             return categorias;
         }
 

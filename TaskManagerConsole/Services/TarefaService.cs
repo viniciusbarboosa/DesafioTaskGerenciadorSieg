@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TaskManagerConsole.Entities;
+using TaskManagerConsole.Entities.Types;
 using TaskManagerConsole.Repositories;
 
 namespace TaskManagerConsole.Services
@@ -12,7 +13,7 @@ namespace TaskManagerConsole.Services
         CategoriasRepository categoriaService = new CategoriasRepository();
         TarefasRepisitory tarefasService = new TarefasRepisitory();
 
-        public void createTarefa()
+        public void CreateTarefa()
         {
             //CREATE TAREFA
             Console.WriteLine("CRIANDO TAREFA");
@@ -71,7 +72,7 @@ namespace TaskManagerConsole.Services
             {
                 Console.WriteLine("LISTAGEM DE CATEGORIAS");
                 Console.WriteLine("======================================");
-                List<Categoria> categorias = categoriaService.pegarCategorias();
+                List<Categoria> categorias = categoriaService.PegarCategorias();
 
 
                 foreach (var item in categorias.Select((x, i) => new { Value = x.Nome, index = i }))
@@ -135,19 +136,25 @@ namespace TaskManagerConsole.Services
             tarefa.DataVencimento = DateTime.Parse(dataVencimentoString);
             tarefa.NomeCategoria = nomeCategoria;
             tarefa.NomeUsuario = nomeUsuario;
-            tarefa.DataCriacao = DateTime.Now;
 
             tarefasService.CriarTarefa(tarefa);
         }
 
-        public void listarTarefas()
+        public void ListarTarefas()
         {
             Console.WriteLine("LISTAGEM DE TAREFAS");
             Console.WriteLine("=================================");
-            tarefasService.ListarTarefa();
+            List<Tarefa> tarefas = tarefasService.PegarTarefas();
+
+            foreach (var item in tarefas.Select((x, i) => new { Titulo = x.Titulo, Descricao = x.Descricao, DataVencimento = x.DataVencimento, DataCriacao = x.DataCriacao, Status = x.Status, NomeUsuario = x.NomeUsuario, NomeCategoria = x.NomeCategoria, index = i }))
+            {
+                Console.WriteLine($" Id:{item.index} = TITULO : {item.Titulo} | DESCRICAO : {item.Descricao} | DATA VENCIMENTO : {item.DataVencimento} | DATA CRIAÇÃO {item.DataCriacao} | STATUS : {item.Status} | CATEGORIA : {item.NomeCategoria} | RESPONSAVEL : {item.NomeUsuario}");
+                Console.WriteLine("========================================");
+            }
+
         }
 
-        public void deletarTarefa()
+        public void DeletarTarefa()
         {
             //DELETAR
             Console.WriteLine("LISTAGEM DE TAREFAS");
@@ -175,7 +182,7 @@ namespace TaskManagerConsole.Services
             tarefasService.AtualizarTarefas(tarefas);
         }
 
-        public void updateTarefas()
+        public void UpdateTarefas()
         {
             //UPDATE DE TAREFAS
             string titulo = "";
@@ -286,7 +293,7 @@ namespace TaskManagerConsole.Services
             {
                 Console.WriteLine("LISTAGEM DE CATEGORIAS");
                 Console.WriteLine("======================================");
-                List<Categoria> categorias = categoriaService.pegarCategorias();
+                List<Categoria> categorias = categoriaService.PegarCategorias();
 
 
                 foreach (var item in categorias.Select((x, i) => new { Value = x.Nome, index = i }))
@@ -354,7 +361,7 @@ namespace TaskManagerConsole.Services
             tarefasService.AtualizarTarefas(tarefas);
         }
 
-        public void listarTarefaConcluidas()
+        public void ListarTarefaConcluidas()
         {
             Console.WriteLine("LISTAGEM DE TAREFAS");
             Console.WriteLine("=================================");
@@ -370,12 +377,12 @@ namespace TaskManagerConsole.Services
             idEscolhido = int.Parse(Console.ReadLine());
 
             Tarefa tarefaEditando = tarefas[idEscolhido];
-            tarefaEditando.Status = "Concluída";
+            tarefaEditando.Status = StatusTarefa.Concluida;
 
             tarefasService.AtualizarTarefas(tarefas);
         }
 
-        public void listarTarefasOrdenadasVencimento()
+        public void ListarTarefasOrdenadasVencimento()
         {
             //MOSTRAR ORDENADAS POR DATA DE VENCIMENTO
             Console.WriteLine("LISTAGEM DE TAREFAS POR DATA DE VENCIMENTO");
@@ -393,7 +400,7 @@ namespace TaskManagerConsole.Services
             }
         }
 
-        public void listarTarefasVencidas()
+        public void ListarTarefasVencidas()
         {
             //ORDENAR TAREFAS ATRASADAS
             Console.WriteLine("LISTAGEM DE TAREFAS POR DATA DE VENCIMENTO");
@@ -402,7 +409,7 @@ namespace TaskManagerConsole.Services
 
             var novaLista = tarefas
                 .Where(i => i.DataVencimento <= DateTime.Now)
-                .Where(i => i.Status != "Concluída")
+                .Where(i => i.Status != StatusTarefa.Concluida)
                 .ToList();
 
             foreach (var item in novaLista.Select((x, i) => new { Titulo = x.Titulo, Descricao = x.Descricao, DataVencimento = x.DataVencimento, DataCriacao = x.DataCriacao, Status = x.Status, NomeUsuario = x.NomeUsuario, NomeCategoria = x.NomeCategoria, index = i }))

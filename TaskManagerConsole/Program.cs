@@ -31,84 +31,54 @@ class Program{
                     usuarioServices.ListarUsuarios();
                     break;
                 case 3:
-                    categoriaServices.criarCategoria();
+                    categoriaServices.CriarCategoria();
                     break;
                 case 4:
-                    categoriaServices.listarCategorias();
+                    categoriaServices.ListarCategorias();
                     break;
                 case 5:
-                    categoriaServices.deletarCategoria();
+                    categoriaServices.DeletarCategoria();
                     break;
                 case 6:
-                    tarefaServices.createTarefa();
+                    tarefaServices.CreateTarefa();
                     break;
                 case 7:
-                    tarefaServices.listarTarefas();
+                    tarefaServices.ListarTarefas();
                     break;
                 case 8:
-                    tarefaServices.deletarTarefa();
+                    tarefaServices.DeletarTarefa();
                     break;
-                case 
-
-
+                case 9:
+                    tarefaServices.UpdateTarefas();
+                    break;
+                case 10:
+                    tarefaServices.ListarTarefaConcluidas();
+                    break;
+                case 11:
+                    tarefaServices.ListarTarefasOrdenadasVencimento();
+                    break;
+                case 12:
+                    tarefaServices.ListarTarefasVencidas();
+                    break;
+                case 13:
+                    continuarAplicacao = false;
+                    break;
+                default:
+                    Console.WriteLine("Opção escolhida Invalida");
+                    break;
             }
 
-               
-            
-
-            if (opcao == 1)
+            string escolha;
+            if (continuarAplicacao == true)
             {
-                usuarioServices.CriarUsuario();
-            }
-            
-            else if (opcao == 4)
-            {
-                
-            }
-            else if (opcao == 5)
-            {
-                
-            }
-            else if (opcao == 6)
-            {
-                
-            }
-            else if (opcao == 7)
-            {
-                
-            }
-            else if (opcao == 8)
-            {
-                
-            }
-            else if (opcao == 9)
-            {
-                tarefaServices.updateTarefas();
-            }
-            else if (opcao == 10)
-            {
-                tarefaServices.listarTarefaConcluidas();
-            }
-            else if (opcao == 11)
-            {
-                tarefaServices.listarTarefasOrdenadasVencimento();
-            }
-            else if (opcao == 12)
-            {
-                tarefaServices.listarTarefasVencidas();
-            }
-            else if (opcao == 13)
-            {
-                break;
+                Console.WriteLine("Deseja Parar a aplicação ? Caso queira digite 'S' ");
+                escolha = Console.ReadLine();
             }
             else
             {
-                Console.WriteLine("Opção escolhida Invalida");
+                escolha = "S";
             }
-
             
-            Console.WriteLine("Deseja Parar a aplicação ? Caso queira digite 'S' ");
-            string escolha = Console.ReadLine();
 
             if(escolha.ToUpper() == "S")
             {

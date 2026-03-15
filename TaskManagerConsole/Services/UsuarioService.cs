@@ -45,7 +45,12 @@ namespace TaskManagerConsole.Services
         {
             Console.WriteLine("LISTAGEM DE USUÁRIOS");
             Console.WriteLine("======================================");
-            usuarioService.ListarUsuario();
+            var usuarios = usuarioService.PegarUsuarios();
+            foreach (var item in usuarios.Select((x, i) => new { Nome = x.Nome, Email = x.Email, index = i }))
+            {
+                Console.WriteLine($" {item.Nome} - Email : {item.Email}");
+            }
+
         }
     }
 }

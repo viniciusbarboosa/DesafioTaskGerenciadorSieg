@@ -4,7 +4,11 @@ using System.Text;
 
 namespace TaskManagerConsole.Entities.Types
 {
-    internal class StatusTarefa
+    public enum StatusTarefa
     {
+        Pendente,
+        EmAndamento,
+        Cancelada,
+        Concluida
     }
 }
