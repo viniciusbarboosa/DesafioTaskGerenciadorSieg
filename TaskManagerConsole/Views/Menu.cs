@@ -6,7 +6,7 @@ namespace TaskManagerConsole.Views
 {
     public class Menu
     {
-        public static void MostrarMenu()
+        public static void ShowMenu()
         {
             Console.Clear();
 

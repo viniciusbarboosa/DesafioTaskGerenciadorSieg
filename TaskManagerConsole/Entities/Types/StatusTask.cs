@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TaskManagerConsole.Entities.Types
 {
-    public enum StatusTarefa
+    public enum StatusTask
     {
         Pendente,
         EmAndamento,

@@ -7,94 +7,94 @@ class Program{
 
     public static void Main(string[] args)
     {
-        bool continuarAplicacao = true;
+        bool continueApplication = true;
 
-        UsuarioRepository usuarioRepository = new UsuarioRepository();
-        CategoriasRepository categoriasRepository = new CategoriasRepository();
-        TarefasRepository tarefasRepository = new TarefasRepository();
+        UserRepository userRepository = new UserRepository();
+        CategoryRepository categoryRepository = new CategoryRepository();
+        TaskRepository taskRepository = new TaskRepository();
 
-        UsuarioService usuarioServices = new UsuarioService(usuarioRepository);
-        CategoriaService categoriaServices = new CategoriaService(categoriasRepository,tarefasRepository);
-        TarefaService tarefaServices = new TarefaService(usuarioRepository,categoriasRepository,tarefasRepository);
+        UserService userServices = new UserService(userRepository);
+        CategoryService categoryServices = new CategoryService(categoryRepository, taskRepository);
+        TaskService taskServices = new TaskService(userRepository, categoryRepository, taskRepository);
 
         
-        while (continuarAplicacao) {
+        while (continueApplication) {
 
-            int opcao = 99;
+            int option = 99;
 
-            Menu.MostrarMenu();
-            while(!int.TryParse(Console.ReadLine(), out opcao))
+            Menu.ShowMenu();
+            while(!int.TryParse(Console.ReadLine(), out option))
             {
                 Console.WriteLine("Digite um Valor Valido (Apenas Numeros Inteiros)");
             }
 
-            switch (opcao)
+            switch (option)
             {
                 case 1:
-                    usuarioServices.CriarUsuario();
+                    userServices.CreateUser();
                     break;
                 case 2:
-                    usuarioServices.ListarUsuarios();
+                    userServices.GetUsers();
                     break;
                 case 3:
-                    categoriaServices.CriarCategoria();
+                    categoryServices.CreateCategory();
                     break;
                 case 4:
-                    categoriaServices.ListarCategorias();
+                    categoryServices.GetCategory();
                     break;
                 case 5:
-                    categoriaServices.DeletarCategoria();
+                    categoryServices.DeleteCategory();
                     break;
                 case 6:
-                    tarefaServices.CreateTarefa();
+                    taskServices.CreateTask();
                     break;
                 case 7:
-                    tarefaServices.ListarTarefas();
+                    taskServices.GetTask();
                     break;
                 case 8:
-                    tarefaServices.DeletarTarefa();
+                    taskServices.DeleteTask();
                     break;
                 case 9:
-                    tarefaServices.UpdateTarefas();
+                    taskServices.UpdateTask();
                     break;
                 case 10:
-                    tarefaServices.ListarTarefaMarcarConcluida();
+                    taskServices.GetTaskToMarkAsComplete();
                     break;
                 case 11:
-                    tarefaServices.ListarTarefasOrdenadasVencimento();
+                    taskServices.ListTasksSortedDueDate();
                     break;
                 case 12:
-                    tarefaServices.ListarTarefasVencidas();
+                    taskServices.ListOverdueTasks();
                     break;
                 case 13:
-                    tarefaServices.FiltrarTarefasPorStatus();
+                    taskServices.FilterTasksByStatus();
                     break;
                 case 14:
-                    tarefaServices.FiltrarTarefasPorCategoria();
+                    taskServices.FilterTasksByCategory();
                     break;
                 case 15:
-                    continuarAplicacao = false;
+                    continueApplication = false;
                     break;
                 default:
                     Console.WriteLine("Opção escolhida Invalida");
                     break;
             }
 
-            string escolha;
-            if (continuarAplicacao == true)
+            string choice;
+            if (continueApplication == true)
             {
                 Console.WriteLine("Deseja Parar a aplicação ? Caso queira digite 'S' ");
-                escolha = Console.ReadLine();
+                choice = Console.ReadLine();
             }
             else
             {
-                escolha = "S";
+                choice = "S";
             }
             
 
-            if(escolha.ToUpper() == "S")
+            if(choice.ToUpper() == "S")
             {
-                continuarAplicacao = false;
+                continueApplication = false;
             }
             
         }
