@@ -560,6 +560,12 @@ namespace TaskManagerConsole.Services
                                .Where(i => i.NomeCategoria == nomeCategoria)
                                .ToList();
 
+            if (tarefasFiltradas.Count == 0)
+            {
+                Console.WriteLine("Não possui nenhuma tarefa pra esse status");
+                return;
+            }
+
             foreach (var item in tarefasFiltradas.Select((x, i) => new { Titulo = x.Titulo, Descricao = x.Descricao, DataVencimento = x.DataVencimento, DataCriacao = x.DataCriacao, Status = x.Status, NomeUsuario = x.NomeUsuario, NomeCategoria = x.NomeCategoria, index = i }))
             {
                 Console.WriteLine($" Id:{item.index} = TITULO : {item.Titulo} | DESCRICAO : {item.Descricao} | DATA VENCIMENTO : {item.DataVencimento} | DATA CRIAÇÃO {item.DataCriacao} | STATUS : {item.Status} | CATEGORIA : {item.NomeCategoria} | RESPONSAVEL : {item.NomeUsuario}");
