@@ -8,8 +8,8 @@ namespace TaskManagerConsole.Entities
     public class User : BaseEntity
     {
         public User(string name,string email) {
-            this.Name = name;
-            this.Email = email;
+            Name = name;
+            Email = email;
         }
 
         public string Name { get; private set; }

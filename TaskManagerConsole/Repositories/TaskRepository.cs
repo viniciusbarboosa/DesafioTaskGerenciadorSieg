@@ -12,17 +12,17 @@ namespace TaskManagerConsole.Repositories
     {
         public void Create(Tasks task)
         {
-            JsonFileHelper.WriteFile(task);
+            JsonFileHelper.WriteFile(task, "tarefas.json");
         }
 
         public void Update(List<Tasks> listTask)
         {
-            JsonFileHelper.UpdateFile(listTask);
+            JsonFileHelper.UpdateFile(listTask, "tarefas.json");
         }
 
         public List<Tasks> Get()
         {
-            List<Tasks> tasks = JsonFileHelper.GetTasksFile();
+            List<Tasks> tasks = JsonFileHelper.GetFile<Tasks>("tarefas.json");
             return tasks;
         }
 

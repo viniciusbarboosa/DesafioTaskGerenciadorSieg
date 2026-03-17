@@ -14,17 +14,17 @@ namespace TaskManagerConsole.Repositories
 
         public void Create(Category category)
         {
-            JsonFileHelper.WriteFile(category);
+            JsonFileHelper.WriteFile(category,"categoria.json");
         }
 
         public void Update(List<Category> listCategory)
         {
-            JsonFileHelper.UpdateFile(listCategory);
+            JsonFileHelper.UpdateFile(listCategory, "categoria.json");
         }
 
         public List<Category> Get()
         {
-            var categorys = JsonFileHelper.GetCategoriesFile();
+            var categorys = JsonFileHelper.GetFile<Category>("categoria.json");
             return categorys;
         }
 

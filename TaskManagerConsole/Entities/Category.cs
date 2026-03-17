@@ -9,8 +9,8 @@ namespace TaskManagerConsole.Entities
     {
         public Category(string name,string color)
         {
-            this.Name = name;
-            this.Color = color;
+            Name = name;
+            Color = color;
         }
         
         public string Name { get; private set; }

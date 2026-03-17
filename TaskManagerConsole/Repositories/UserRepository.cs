@@ -12,18 +12,18 @@ namespace TaskManagerConsole.Repositories
     {
         public void Create(User user)
         {
-            JsonFileHelper.WriteFile(user);
+            JsonFileHelper.WriteFile(user, "usuario.json");
         }
 
         public List<User> Get()
         {
-            List<User> users = JsonFileHelper.GetUsersFile();
+            List<User> users = JsonFileHelper.GetFile<User>("usuario.json");
             return users;
         }
 
         public void Update(List<User> listUser)
         {
-            JsonFileHelper.UpdateFile(listUser);
+            JsonFileHelper.UpdateFile(listUser, "usuario.json");
         }
     }
 }

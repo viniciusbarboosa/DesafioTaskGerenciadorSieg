@@ -48,107 +48,40 @@ namespace TaskManagerConsole.Helpers
             }
         }
 
-        public static void WriteFile(Category category)
+        public static void WriteFile<T>(T item,string pathFile)
         {
             CheckFiles();
 
-            var pathJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "categoria.json"));
-            var categorys = JsonConvert.DeserializeObject<List<Category>>(pathJson);
-            categorys.Add(category);
-            var categorysString = JsonConvert.SerializeObject(categorys);
+            var pathJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathFile));
+            var itens = JsonConvert.DeserializeObject<List<T>>(pathJson);
+            itens.Add(item);
+            var categorysString = JsonConvert.SerializeObject(itens);
 
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "categoria.json");
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathFile);
             File.WriteAllText(path, categorysString);
         }
 
-        public static void WriteFile(Tasks task)
+        public static void UpdateFile<T>(List<T> listItens, string pathFile)
         {
             CheckFiles();
 
-            var pathJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tarefas.json"));
-            var tasks = JsonConvert.DeserializeObject<List<Tasks>>(pathJson);
-            tasks.Add(task);
-            var tasksString = JsonConvert.SerializeObject(tasks);
+            var pathJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathFile));
+            var itensString = JsonConvert.SerializeObject(listItens);
 
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tarefas.json");
-            File.WriteAllText(path, tasksString);
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathFile);
+            File.WriteAllText(path, itensString);
         }
 
-        public static void WriteFile(User user)
+
+        public static List<T> GetFile<T>(string pathFile)
         {
             CheckFiles();
 
-            var pathJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "usuario.json"));
-            var users = JsonConvert.DeserializeObject<List<User>>(pathJson);
-            users.Add(user);
-            var usersString = JsonConvert.SerializeObject(users);
+            var pathJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathFile));
+            var itens = JsonConvert.DeserializeObject<List<T>>(pathJson);
 
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "usuario.json");
-            File.WriteAllText(path, usersString);
+            return itens;
         }
 
-        public static void UpdateFile(List<Category> listCategories)
-        {
-            CheckFiles();
-
-            var pathJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "categoria.json"));
-            var categorysString = JsonConvert.SerializeObject(listCategories);
-
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "categoria.json");
-            File.WriteAllText(path, categorysString);
-        }
-
-        public static void UpdateFile(List<Tasks> listTasks)
-        {
-            CheckFiles();
-
-            var pathJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tarefas.json"));
-            var tasksString = JsonConvert.SerializeObject(listTasks);
-
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tarefas.json");
-            File.WriteAllText(path, tasksString);
-        }
-
-        public static void UpdateFile(List<User> listUser)
-        {
-            CheckFiles();
-
-            var pathJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "usuario.json"));
-            var usersString = JsonConvert.SerializeObject(listUser);
-
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "usuario.json");
-            File.WriteAllText(path, usersString);
-        }
-
-
-        public static List<Category> GetCategoriesFile()
-        {
-            CheckFiles();
-
-            var pathJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "categoria.json"));
-            var categorys = JsonConvert.DeserializeObject<List<Category>>(pathJson);
-
-            return categorys;
-        }
-
-        public static List<User> GetUsersFile()
-        {
-            CheckFiles();
-
-            var pathJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "usuario.json"));
-            var users = JsonConvert.DeserializeObject<List<User>>(pathJson);
-
-            return users;
-        }
-
-        public static List<Tasks> GetTasksFile()
-        {
-            CheckFiles();
-
-            var pathJson  = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tarefas.json"));
-            var tasks = JsonConvert.DeserializeObject<List<Entities.Tasks>>(pathJson);
-
-            return tasks;
-        }
     }
 }

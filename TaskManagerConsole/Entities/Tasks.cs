@@ -11,12 +11,12 @@ namespace TaskManagerConsole.Entities
         public Tasks(string title,string description,DateTime dateDue,string nameCategory,string userName,StatusTask status)
         {
             
-            this.Title = title;
-            this.Description = description;
-            this.DateDue = dateDue;
-            this.NameCategory = nameCategory;
-            this.NameUser = userName;
-            this.Status = status;
+            Title = title;
+            Description = description;
+            DateDue = dateDue;
+            NameCategory = nameCategory;
+            NameUser = userName;
+            Status = status;
         }
 
         public string Title { get; private set; }
@@ -29,17 +29,17 @@ namespace TaskManagerConsole.Entities
 
         public void UpdateTask(string title, string description,DateTime dueDate,string nameCategory,string nameUsers,StatusTask status)
         {
-            this.Title= title;
-            this.Description = description;
-            this.DateDue = dueDate;
-            this.NameCategory = nameCategory;
-            this.NameUser = nameUsers;
-            this.Status = status;
+            Title= title;
+            Description = description;
+            DateDue = dueDate;
+            NameCategory = nameCategory;
+            NameUser = nameUsers;
+            Status = status;
         }
 
         public void UpdateStatus(StatusTask status)
         {
-            this.Status = status;
+            Status = status;
         }
 
     }
