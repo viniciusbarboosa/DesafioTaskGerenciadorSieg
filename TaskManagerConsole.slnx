@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="TaskManagerConsole.Api/TaskManagerConsole.Api.csproj" Id="071f40f5-b649-49c6-b96b-dd3c3dbd0484" />
   <Project Path="TaskManagerConsole/TaskManagerConsole.csproj" />
 </Solution>
