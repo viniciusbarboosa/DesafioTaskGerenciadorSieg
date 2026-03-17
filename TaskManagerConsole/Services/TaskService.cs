@@ -11,11 +11,11 @@ namespace TaskManagerConsole.Services
 {
     public class TaskService
     {
-        IUserRepository _userRepository;
-        CategoryRepository _categoryRepository;
-        TaskRepository _taskRepository;
+        IRepository<User> _userRepository;
+        IRepository<Category> _categoryRepository;
+        IRepository<Tasks> _taskRepository;
 
-        public TaskService(IUserRepository userRepository, CategoryRepository categoryRepository,TaskRepository taskRepository)
+        public TaskService(IRepository<User> userRepository, IRepository<Category> categoryRepository, IRepository<Tasks> taskRepository)
         {
             _userRepository = userRepository;
             _categoryRepository = categoryRepository;
@@ -24,8 +24,8 @@ namespace TaskManagerConsole.Services
 
         public void CreateTask()
         {
-            List<Category> categoriesVerification = _categoryRepository.GetCategory();
-            List<User> usersVerification = _userRepository.GetUsers();
+            List<Category> categoriesVerification = _categoryRepository.Get();
+            List<User> usersVerification = _userRepository.Get();
 
             if (categoriesVerification.Count == 0)
             {
@@ -97,7 +97,7 @@ namespace TaskManagerConsole.Services
             {
                 Console.WriteLine("LISTAGEM DE CATEGORIAS");
                 Console.WriteLine("======================================");
-                List<Category> categories = _categoryRepository.GetCategory();
+                List<Category> categories = _categoryRepository.Get();
 
 
                 foreach (var item in categories.Select((x, i) => new { Value = x.Name, index = i }))
@@ -133,7 +133,7 @@ namespace TaskManagerConsole.Services
             {
                 Console.WriteLine("LISTAGEM DE USUARIOS");
                 Console.WriteLine("======================================");
-                List<User> users = _userRepository.GetUsers();
+                List<User> users = _userRepository.Get();
 
                 if (users.Count == 0)
                 {
@@ -167,14 +167,14 @@ namespace TaskManagerConsole.Services
             }
 
             Tasks task = new Tasks(title,description, DateTime.Parse(dueDateString),categoryName,userName,StatusTask.Pendente);
-            _taskRepository.CreateTask(task);
+            _taskRepository.Create(task);
         }
 
         public void GetTask()
         {
             Console.WriteLine("LISTAGEM DE TAREFAS");
             Console.WriteLine("=================================");
-            List<Tasks> tasks = _taskRepository.GetTasks();
+            List<Tasks> tasks = _taskRepository.Get();
 
             foreach (var item in tasks.Select((x, i) => new { Title = x.Title , Description = x.Description, DateDue = x.DateDue, DateCreation = x.DateCreation , DateCompletion = x.DateCompletion, Status = x.Status, NameUser = x.NameUser, NameCategory = x.NameCategory, index = i }))
             {
@@ -198,7 +198,7 @@ namespace TaskManagerConsole.Services
             //DELETAR
             Console.WriteLine("LISTAGEM DE TAREFAS");
             Console.WriteLine("=================================");
-            List<Tasks> tasks = _taskRepository.GetTasks();
+            List<Tasks> tasks = _taskRepository.Get();
 
             foreach (var item in tasks.Select((x, i) => new { Title = x.Title, Description = x.Description, DateDue = x.DateDue, DateCreation = x.DateCreation, DateCompletion = x.DateCompletion, Status = x.Status, NameUser = x.NameUser, NameCategory = x.NameCategory, index = i }))
             {
@@ -227,7 +227,7 @@ namespace TaskManagerConsole.Services
             }
 
             tasks.RemoveAt(idChosen);
-            _taskRepository.UpdateTasks(tasks);
+            _taskRepository.Update(tasks);
         }
 
         public void UpdateTask()
@@ -244,7 +244,7 @@ namespace TaskManagerConsole.Services
 
             Console.WriteLine("LISTAGEM DE TAREFAS");
             Console.WriteLine("=================================");
-            List<Tasks> tasks = _taskRepository.GetTasks();
+            List<Tasks> tasks = _taskRepository.Get();
 
             foreach (var item in tasks.Select((x, i) => new { Title = x.Title, Description = x.Description, DateDue = x.DateDue, DateCreation = x.DateCreation, DateCompletion = x.DateCompletion, Status = x.Status, NameUser = x.NameUser, NameCategory = x.NameCategory, index = i }))
             {
@@ -356,7 +356,7 @@ namespace TaskManagerConsole.Services
             {
                 Console.WriteLine("LISTAGEM DE CATEGORIAS");
                 Console.WriteLine("======================================");
-                List<Category> categorys = _categoryRepository.GetCategory();
+                List<Category> categorys = _categoryRepository.Get();
 
 
                 foreach (var item in categorys.Select((x, i) => new { Value = x.Name, index = i }))
@@ -389,7 +389,7 @@ namespace TaskManagerConsole.Services
             {
                 Console.WriteLine("LISTAGEM DE USUARIOS");
                 Console.WriteLine("======================================");
-                List<User> users = _userRepository.GetUsers();
+                List<User> users = _userRepository.Get();
 
                 if (users.Count == 0)
                 {
@@ -417,14 +417,14 @@ namespace TaskManagerConsole.Services
             }
 
             tasksEditing.UpdateTask(title, description, DateTime.Parse(dueDateString),nameCategory,nameUser,statusTask);
-            _taskRepository.UpdateTasks(tasks);
+            _taskRepository.Update(tasks);
         }
 
         public void GetTaskToMarkAsComplete()
         {
             Console.WriteLine("LISTAGEM DE TAREFAS");
             Console.WriteLine("=================================");
-            List<Tasks> tasks = _taskRepository.GetTasks();
+            List<Tasks> tasks = _taskRepository.Get();
 
             foreach (var item in tasks.Select((x, i) => new { Title = x.Title, Description = x.Description, DateDue = x.DateDue, DateCreation = x.DateCreation, DateCompletion = x.DateCompletion, Status = x.Status, NameUser = x.NameUser, NameCategory = x.NameCategory, index = i }))
             {
@@ -449,7 +449,7 @@ namespace TaskManagerConsole.Services
 
             Tasks taskEditing = tasks[idChosen];
             taskEditing.UpdateStatus(StatusTask.Concluida);
-            _taskRepository.UpdateTasks(tasks);
+            _taskRepository.Update(tasks);
         }
 
         public void ListTasksSortedDueDate()
@@ -457,7 +457,7 @@ namespace TaskManagerConsole.Services
             //MOSTRAR ORDENADAS POR DATA DE VENCIMENTO
             Console.WriteLine("LISTAGEM DE TAREFAS POR DATA DE VENCIMENTO");
             Console.WriteLine("=================================");
-            List<Tasks> tasks = _taskRepository.GetTasks();
+            List<Tasks> tasks = _taskRepository.Get();
 
             var newList = tasks
                 .OrderBy(i => i.DateDue)
@@ -483,7 +483,7 @@ namespace TaskManagerConsole.Services
             //ORDENAR TAREFAS ATRASADAS
             Console.WriteLine("LISTAGEM DE TAREFAS POR DATA DE VENCIMENTO");
             Console.WriteLine("=================================");
-            List<Tasks> tasks = _taskRepository.GetTasks();
+            List<Tasks> tasks = _taskRepository.Get();
 
             var newList = tasks
                 .Where(i => i.DateDue <= DateTime.Now)
@@ -507,7 +507,7 @@ namespace TaskManagerConsole.Services
 
         public void FilterTasksByStatus()
         {
-            List<Tasks> tasks = _taskRepository.GetTasks();
+            List<Tasks> tasks = _taskRepository.Get();
 
             Console.WriteLine($"ESCOLHA O STATUS QUE DESEJA FILTRAR");
             Console.WriteLine("[ 1 ] - Pendente");
@@ -571,7 +571,7 @@ namespace TaskManagerConsole.Services
             {
                 Console.WriteLine("LISTAGEM DE CATEGORIAS");
                 Console.WriteLine("======================================");
-                List<Category> categorys = _categoryRepository.GetCategory();
+                List<Category> categorys = _categoryRepository.Get();
 
 
                 foreach (var item in categorys.Select((x, i) => new { Value = x.Name, index = i }))
@@ -603,7 +603,7 @@ namespace TaskManagerConsole.Services
 
             }
 
-            List<Tasks> tasks = _taskRepository.GetTasks();
+            List<Tasks> tasks = _taskRepository.Get();
 
             List<Tasks> filteredTasks;
 

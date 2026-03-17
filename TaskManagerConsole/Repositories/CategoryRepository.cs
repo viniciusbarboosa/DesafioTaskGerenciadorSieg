@@ -9,20 +9,20 @@ using TaskManagerConsole.Repositories.interfaces;
 
 namespace TaskManagerConsole.Repositories
 {
-    public class CategoryRepository : ICategoryRepository
+    public class CategoryRepository : IRepository<Category>
     {
 
-        public void CreateCategory(Category category)
+        public void Create(Category category)
         {
             JsonFileHelper.WriteFile(category);
         }
 
-        public void UpdatesCategory(List<Category> listCategory)
+        public void Update(List<Category> listCategory)
         {
             JsonFileHelper.UpdateFile(listCategory);
         }
 
-        public List<Category> GetCategory()
+        public List<Category> Get()
         {
             var categorys = JsonFileHelper.GetCategoriesFile();
             return categorys;

@@ -10,9 +10,9 @@ namespace TaskManagerConsole.Services
 {
     public class UserService
     {
-        IUserRepository _userRepository;
+        IRepository<User> _userRepository;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IRepository<User> userRepository)
         {
             _userRepository = userRepository; 
         }
@@ -31,7 +31,7 @@ namespace TaskManagerConsole.Services
                 return;
             }
 
-        List<User> users = _userRepository.GetUsers();
+        List<User> users = _userRepository.Get();
 
             foreach (var item in users.Select((x, i) => new { Value = x.Name, index = i }))
             {
@@ -44,7 +44,7 @@ namespace TaskManagerConsole.Services
 
             User newUser = new User(user,email);
 
-            _userRepository.CreateUser(newUser);
+            _userRepository.Create(newUser);
 
             Console.WriteLine("Usuário CRIADO COM SUCESSO");
         }
@@ -53,7 +53,7 @@ namespace TaskManagerConsole.Services
         {
             Console.WriteLine("LISTAGEM DE USUÁRIOS");
             Console.WriteLine("======================================");
-            var usuarios = _userRepository.GetUsers();
+            var usuarios = _userRepository.Get();
             foreach (var item in usuarios.Select((x, i) => new { Name = x.Name, Email = x.Email, index = i }))
             {
                 Console.WriteLine($" {item.Name} - Email : {item.Email}");

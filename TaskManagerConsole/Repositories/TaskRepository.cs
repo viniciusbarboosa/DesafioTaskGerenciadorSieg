@@ -8,19 +8,19 @@ using TaskManagerConsole.Repositories.interfaces;
 
 namespace TaskManagerConsole.Repositories
 {
-    public class TaskRepository:ITaskRepository
+    public class TaskRepository:IRepository<Tasks>
     {
-        public void CreateTask(Tasks tarefa)
+        public void Create(Tasks task)
         {
-            JsonFileHelper.WriteFile(tarefa);
+            JsonFileHelper.WriteFile(task);
         }
 
-        public void UpdateTasks(List<Tasks> listaTarefas)
+        public void Update(List<Tasks> listTask)
         {
-            JsonFileHelper.UpdateFile(listaTarefas);
+            JsonFileHelper.UpdateFile(listTask);
         }
 
-        public List<Tasks> GetTasks()
+        public List<Tasks> Get()
         {
             List<Tasks> tasks = JsonFileHelper.GetTasksFile();
             return tasks;

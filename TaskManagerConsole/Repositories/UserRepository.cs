@@ -8,18 +8,22 @@ using TaskManagerConsole.Repositories.interfaces;
 
 namespace TaskManagerConsole.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : IRepository<User>
     {
-        public void CreateUser(User user)
+        public void Create(User user)
         {
             JsonFileHelper.WriteFile(user);
         }
 
-        public List<User> GetUsers()
+        public List<User> Get()
         {
             List<User> users = JsonFileHelper.GetUsersFile();
             return users;
         }
 
+        public void Update(List<User> listUser)
+        {
+            JsonFileHelper.UpdateFile(listUser);
+        }
     }
 }

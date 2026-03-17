@@ -109,7 +109,18 @@ namespace TaskManagerConsole.Helpers
             File.WriteAllText(path, tasksString);
         }
 
-      
+        public static void UpdateFile(List<User> listUser)
+        {
+            CheckFiles();
+
+            var pathJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "usuario.json"));
+            var usersString = JsonConvert.SerializeObject(listUser);
+
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "usuario.json");
+            File.WriteAllText(path, usersString);
+        }
+
+
         public static List<Category> GetCategoriesFile()
         {
             CheckFiles();

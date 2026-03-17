@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Text;
 using TaskManagerConsole.Entities;
 using TaskManagerConsole.Repositories;
+using TaskManagerConsole.Repositories.interfaces;
 
 namespace TaskManagerConsole.Services
 {
 
     public class CategoryService
     {
-        CategoryRepository _categoryRepository;
-        TaskRepository _taskRepository;
+        IRepository<Category> _categoryRepository;
+        IRepository<Tasks> _taskRepository;
 
-        public CategoryService(CategoryRepository categoryRepository, TaskRepository taskRepository)
+        public CategoryService(IRepository<Category> categoryRepository, IRepository<Tasks> taskRepository)
         {
             _categoryRepository = categoryRepository;
             _taskRepository = taskRepository;
@@ -30,7 +31,7 @@ namespace TaskManagerConsole.Services
             }
 
             bool available = true;
-            List<Category> categorys = _categoryRepository.GetCategory();
+            List<Category> categorys = _categoryRepository.Get();
             foreach (var item in categorys.Select((x, i) => new { Value = x.Name, index = i }))
             {
                 if(item.Value == nameCategory)
@@ -52,13 +53,13 @@ namespace TaskManagerConsole.Services
 
             Category category  = new Category(nameCategory,color);
 
-            _categoryRepository.CreateCategory(category);
+            _categoryRepository.Create(category);
         }
 
         public void GetCategory() {
             Console.WriteLine("LISTAGEM DE CATEGORIAS");
             Console.WriteLine("======================================");
-            List<Category> categorys = _categoryRepository.GetCategory();
+            List<Category> categorys = _categoryRepository.Get();
 
             foreach (var item in categorys.Select((x, i) => new { Nome = x.Name, Color = x.Color, index = i }))
             {
@@ -71,8 +72,8 @@ namespace TaskManagerConsole.Services
             //DELETAR CATEGORIA
             Console.WriteLine("LISTAGEM DE CATEGORIAS");
             Console.WriteLine("======================================");
-            List<Tasks> tasks = _taskRepository.GetTasks();
-            List<Category> categorys = _categoryRepository.GetCategory();
+            List<Tasks> tasks = _taskRepository.Get();
+            List<Category> categorys = _categoryRepository.Get();
 
             if (categorys.Count == 0)
             {
@@ -112,7 +113,7 @@ namespace TaskManagerConsole.Services
 
 
             categorys.RemoveAt(idChoose);
-            _categoryRepository.UpdatesCategory(categorys);
+            _categoryRepository.Update(categorys);
         }
 
     }

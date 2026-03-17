@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using TaskManagerConsole.Entities;
-using TaskManagerConsole.Helpers;
 
 namespace TaskManagerConsole.Repositories.interfaces
 {
-    public interface IUserRepository
+    public interface IRepository<T>
     {
-        public void CreateUser(User user);
+        public void Create(T typeRepositoty);
 
-        public List<User> GetUsers();
+        public void Update(List<T> typeRepositoty);
+
+        public List<T> Get();
     }
 }
