@@ -31,19 +31,23 @@ namespace TaskManagerConsole.Api.Controllers
         {
             if(user == null)
             {
-                return BadRequest("Usuario Não Inserido");
+                return BadRequest(new { message = "Usuario Não Inserido" });
             }
 
             try
             {
                 _userServices.PostUsers(user);
+                return Ok(user);
             }
             catch (Exception ex) {
-                return BadRequest(ex.Message);
-            }
-            
-            return Ok(user);
+                if (!string.IsNullOrEmpty(ex.Message))
+                {
+                    return BadRequest(new { message = ex.Message });
+                }
+                return BadRequest(new {message = "Erro ao Criar Usuario"});   
+            }    
         }
+
 
     }
 }

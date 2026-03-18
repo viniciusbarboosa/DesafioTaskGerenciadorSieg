@@ -2,5 +2,9 @@
 {
     public enum StatusTask
     {
+        Pendente,
+        EmAndamento,
+        Cancelada,
+        Concluida
     }
 }

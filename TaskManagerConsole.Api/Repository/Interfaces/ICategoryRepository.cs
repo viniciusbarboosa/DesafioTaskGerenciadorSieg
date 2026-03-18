@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using TaskManagerConsole.Api.Models;
 
 namespace TaskManagerConsole.Api.Repository.Interfaces
@@ -7,6 +8,8 @@ namespace TaskManagerConsole.Api.Repository.Interfaces
     {
         public List<Category> GetCategories();
         public Category GetCategoryByName(string name);
+        public Category GetCategoryById(string id);
+        public void DeleteCategory(ObjectId id);
         public void CreateCategory(Category category);
     }
 }

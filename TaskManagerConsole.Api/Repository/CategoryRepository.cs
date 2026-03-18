@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using TaskManagerConsole.Api.Contexts;
 using TaskManagerConsole.Api.Models;
 using TaskManagerConsole.Api.Repository.Interfaces;
@@ -25,14 +26,28 @@ namespace TaskManagerConsole.Api.Repository
         {
             var categoryConnection = _dbContext.GetCollection<Category>("Category");
             var filter = Builders<Category>.Filter.Eq(i => i.Name,name);
-            Category categorie = categoryConnection.Find(filter).FirstOrDefault();
-            return categorie;
+            Category category = categoryConnection.Find(filter).FirstOrDefault();
+            return category;
+        }
+
+        public Category GetCategoryById(string id)
+        {
+            var categoryConnection = _dbContext.GetCollection<Category>("Category");
+            var filter = Builders<Category>.Filter.Eq(i => i.ObjectId, new ObjectId(id));
+            Category category = categoryConnection.Find(filter).FirstOrDefault();
+            return category;
         }
 
         public void CreateCategory(Category category)
         {
-            var usuarioConnection = _dbContext.GetCollection<Category>("Category");
-            usuarioConnection.InsertOne(category);
+            var categoryConnection = _dbContext.GetCollection<Category>("Category");
+            categoryConnection.InsertOne(category);
+        }
+
+        public void DeleteCategory(ObjectId id){
+            var categoryConnection = _dbContext.GetCollection<Category>("Category");
+            var filter = Builders<Category>.Filter.Eq(i => i.ObjectId, id);
+            categoryConnection.DeleteOne(filter);
         }
     }
 }

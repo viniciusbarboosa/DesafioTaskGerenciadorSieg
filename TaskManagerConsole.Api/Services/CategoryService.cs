@@ -2,6 +2,7 @@
 using TaskManagerConsole.Api.Models;
 using TaskManagerConsole.Api.Repository;
 using TaskManagerConsole.Api.Repository.Interfaces;
+using MongoDB.Bson;
 
 namespace TaskManagerConsole.Api.Services
 {
@@ -9,10 +10,12 @@ namespace TaskManagerConsole.Api.Services
     {
 
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ITasksRepository _tasksRepository;
 
-        public CategoryService(ICategoryRepository categoryRepository)
+        public CategoryService(ICategoryRepository categoryRepository,ITasksRepository tasksRepository)
         {
             _categoryRepository = categoryRepository;
+            _tasksRepository = tasksRepository;
         }
 
         public List<Category> GetCategories() 
@@ -38,6 +41,29 @@ namespace TaskManagerConsole.Api.Services
             Category category = new Category(categoryDto.Name,categoryDto.Color);
 
             _categoryRepository.CreateCategory(category);
+
+        }
+
+        public void DeleteCategory(string idCategory)
+        {
+            if (string.IsNullOrEmpty(idCategory))
+            {
+                throw new Exception("Categoria nao pode ser vazia");
+            }
+
+            var listCategoryInTasks = _tasksRepository.GetTasksThatContainCategory(new ObjectId(idCategory));
+            if(listCategoryInTasks.Count > 0)
+            {
+                throw new Exception("Não pode apagar Categoria estando ativa nas Tarefas");
+            }
+
+            var exitsCategory = _categoryRepository.GetCategoryById(idCategory);
+            if(exitsCategory == null)
+            {
+                throw new Exception("Categoria não existe");
+            }
+
+            _categoryRepository.DeleteCategory(new ObjectId(idCategory));
 
         }
 

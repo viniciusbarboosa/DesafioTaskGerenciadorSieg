@@ -6,9 +6,9 @@ namespace TaskManagerConsole.Api.Repository.Interfaces
     public interface IUserRepository
     {
         public List<User> GetUers();
-
         public void CreateUser(User user);
-
         public User GetUserByName(string name);
+        public User GetUserById(string id);
+
     }
 }

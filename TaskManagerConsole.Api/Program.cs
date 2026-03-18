@@ -19,10 +19,12 @@ builder.Services.AddScoped<TaskDbContext>();
 //REPOSITORIO
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
+builder.Services.AddScoped<ITasksRepository, TasksRepository>();
 
 //SERVICES
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<TasksService>();
 
 var app = builder.Build();
 

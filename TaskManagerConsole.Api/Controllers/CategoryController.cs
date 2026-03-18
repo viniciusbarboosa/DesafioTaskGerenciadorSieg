@@ -25,8 +25,38 @@ namespace TaskManagerConsole.Api.Controllers
         [HttpPost]
         public ActionResult Post(PostCategoryDto categoryDto)
         {
-            _categoryService.CreateCategory(categoryDto);
-            return Ok(categoryDto);
+            try
+            {
+                _categoryService.CreateCategory(categoryDto);
+                return Ok(new { category=categoryDto,message="Categoria Criada com Sucesso" });
+            }
+            catch (Exception ex)
+            {
+                if (!string.IsNullOrEmpty(ex.Message))
+                {
+                    return BadRequest(new { message = ex.Message });
+                }
+                return BadRequest(new { message = "Erro ao Criar Categoria" });
+            }
+        }
+
+        [HttpDelete]
+        [Route("{idCategory}")]
+        public ActionResult Delete(string idCategory)
+        {
+            try
+            {
+                _categoryService.DeleteCategory(idCategory);
+                return Ok(new { message = "Categoria Criada Com Sucesso"});
+            }catch(Exception ex)
+            {
+                if (!string.IsNullOrEmpty(ex.Message))
+                {
+                    return BadRequest(new { message = ex.Message });
+                }
+                return BadRequest(new { message = "Erro ao Deletar Categoria" });
+            }
+
         }
 
     }
