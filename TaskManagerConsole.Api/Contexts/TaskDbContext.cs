@@ -14,7 +14,6 @@ namespace TaskManagerConsole.Api.Contexts
             _database = client.GetDatabase(settings["DatabaseName"]);
         }
 
-        //PASSAR O TYPE DA PROPRIEDADE PARA ACESSA a colection
         public IMongoCollection<T> GetCollection<T>(string name)
         {
             var collection = _database.GetCollection<T>(name);

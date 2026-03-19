@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic;
 using MongoDB.Bson;
+using MongoDB.Driver;
 using System.Net.NetworkInformation;
 using TaskManagerConsole.Api.DTOs.Tasks;
 using TaskManagerConsole.Api.Models;
@@ -79,10 +80,10 @@ namespace TaskManagerConsole.Api.Services
                 throw new Exception("Titulo Não pode ser Vazio");
             }
 
-            if (editTaskDto.DateDue < DateTime.Now)
-            {
-                throw new Exception("Data nao pode ser Menos que Data Atual");
-            }
+            //if (editTaskDto.DateDue < DateTime.Now)
+            //{
+            //    throw new Exception("Data nao pode ser Menos que Data Atual");
+            //}
 
             if (string.IsNullOrEmpty(editTaskDto.IdCategory)) {
                 throw new Exception("Categoria nao pode ser Vazia");
@@ -93,24 +94,26 @@ namespace TaskManagerConsole.Api.Services
                 throw new Exception("Usuario nao pode ser Vazio");
             }
 
-            if((editTaskDto.Status != "Pendente")&&(editTaskDto.Status != "EmAndamento")&&(editTaskDto.Status != "Cancelada"))
+            if((editTaskDto.Status.ToUpper() != "PENDENTE") &&(editTaskDto.Status.ToUpper() != "EMANDAMENTO") &&(editTaskDto.Status != "CANCELADA"))
             {
                 throw new Exception("Status não Disponivel. Status possiveis [Pendente],[EmAndamento],[Cancelada]");
             }
 
             StatusTask statusTask = StatusTask.Pendente;
 
-            if(editTaskDto.Status == "Pendente")
+            if (editTaskDto.Status.ToUpper() == "PENDENTE")
             {
                 statusTask = StatusTask.Pendente;
-            }else if(editTaskDto.Status == "EmAndamento")
+            }
+            else if (editTaskDto.Status.ToUpper() == "EMANDAMENTO")
             {
                 statusTask = StatusTask.EmAndamento;
-            }else if(editTaskDto.Status == "Cancelada")
+            }
+            else if (editTaskDto.Status.ToUpper() == "CANCELADA")
             {
                 statusTask = StatusTask.Cancelada;
             }
-       
+
             var categoryExists = _categoryRepository.GetCategoryById(editTaskDto.IdCategory);
 
             if (categoryExists == null)
@@ -147,6 +150,88 @@ namespace TaskManagerConsole.Api.Services
 
             _tasksRepository.DeleteTasks(id);
         }
+
+        public void CompleteTask(string idTask)
+        {
+            if(idTask == null)
+            {
+                throw new Exception("Não pode passar tarefa nula.");
+            }
+
+            Tasks task = _tasksRepository.GetById(idTask);
+            if (task == null)
+            {
+                throw new Exception("Tarefa com esse id não existe então nao e possiveel excluir");
+            }
+
+            _tasksRepository.CompleteTasks(new ObjectId(idTask));
+        }
+
+        public List<Tasks> ListTaskCategory(string idCategory)
+        {
+            if (string.IsNullOrEmpty(idCategory))
+            {
+                throw new Exception("Não pode passar idCategory nulo");
+            }
+
+            var categoryExists = _categoryRepository.GetCategoryById(idCategory);
+
+            if (categoryExists == null)
+            {
+                throw new Exception("Categoria com esse Id não eixste");
+            }
+
+            List<Tasks> listTasks = _tasksRepository.GetTaskCategory(new ObjectId(idCategory));
+
+            return listTasks;
+
+        }
+
+        public List<Tasks> ListTaskStatus(string status)
+        {
+            if (string.IsNullOrEmpty(status))
+            {
+                throw new Exception("Não pode passar status nulo");
+            }
+
+            StatusTask statusTask = StatusTask.Pendente;
+
+            if (status.ToUpper() == "PENDENTE")
+            {
+                statusTask = StatusTask.Pendente;
+            }
+            else if (status.ToUpper() == "EMANDAMENTO")
+            {
+                statusTask = StatusTask.EmAndamento;
+            }
+            else if (status.ToUpper() == "CANCELADA")
+            {
+                statusTask = StatusTask.Cancelada;
+            }else if (status.ToUpper() == "CONCLUIDA")
+            { 
+                statusTask = StatusTask.Concluida;
+            }
+            else
+            {
+                throw new Exception("status invalido");
+            }
+
+            List<Tasks> listTasks = _tasksRepository.GetTaskStatus(statusTask);
+            return listTasks;
+        }
+
+        public List<Tasks> GetTasksOrderedDueDate()
+        {
+            List<Tasks> listTasks = _tasksRepository.GetTasksOrderedDueDate();
+            return listTasks;
+        }
+
+        public List<Tasks> GetTasksOverdue()
+        {
+            List<Tasks> listTasks = _tasksRepository.GetTasksOverdue();
+            return listTasks;
+        }
+
 
     }
 }

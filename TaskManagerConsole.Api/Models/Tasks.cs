@@ -4,6 +4,7 @@ using TaskManagerConsole.Api.Models.Types;
 
 namespace TaskManagerConsole.Api.Models
 {
+    [BsonIgnoreExtraElements]
     public class Tasks
     {
         public Tasks(string title, string description, DateTime dateDue, ObjectId idCategory, ObjectId idUser)

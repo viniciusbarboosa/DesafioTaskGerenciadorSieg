@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using TaskManagerConsole.Api.Contexts;
 using TaskManagerConsole.Api.Models;
+using TaskManagerConsole.Api.Models.Types;
 using TaskManagerConsole.Api.Repository.Interfaces;
 
 namespace TaskManagerConsole.Api.Repository
@@ -59,19 +60,56 @@ namespace TaskManagerConsole.Api.Repository
             return listTasks;
         }
 
-  //      public Tasks GetById(ObjectId id)
-  //      {
-   //         var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
-   //         var filter = Builders<Tasks>.Filter.Eq(i => i.ObjectId, id);
-    //        Tasks task = taskConnection.Find(filter).FirstOrDefault();
-    //        return task;
-    //    }
-
         public void DeleteTasks(string idTask)
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
             var filter = Builders<Tasks>.Filter.Eq(i => i.ObjectId,new ObjectId(idTask));
             taskConnection.DeleteOne(filter);
         }
+
+        public void CompleteTasks(ObjectId idTask)
+        {
+            var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
+            var filter = Builders<Tasks>.Filter.Eq(i => i.ObjectId, idTask);
+            var combineUpdate = Builders<Tasks>.Update.Combine(
+            Builders<Tasks>.Update.Set(x => x.Status,StatusTask.Concluida),
+            Builders<Tasks>.Update.Set(x => x.DateCompletion,DateTime.Now)
+            );
+            taskConnection.UpdateOne(filter,combineUpdate);
+        }
+
+        public List<Tasks> GetTaskCategory(ObjectId idCategory)
+        {
+            var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
+            var filter = Builders<Tasks>.Filter.Eq(i =>i.IdCategory,idCategory);
+            List<Tasks> listTasks = taskConnection.Find(filter).ToList();
+            return listTasks;
+        }
+
+        public List<Tasks> GetTaskStatus(StatusTask statusTask)
+        {
+            var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
+            var filter = Builders<Tasks>.Filter.Eq(i => i.Status,statusTask);
+            List<Tasks> listTasks = taskConnection.Find(filter).ToList();
+            return listTasks;
+        }
+
+        public List<Tasks> GetTasksOrderedDueDate()
+        {
+            var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
+            var filter = Builders<Tasks>.Filter.Empty;
+            List<Tasks> listTasks = taskConnection.Find(filter).SortBy(i => i.DateDue).ToList();
+            return listTasks;
+        }
+
+        public List<Tasks> GetTasksOverdue()
+        {
+            var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
+            //var filter = Builders<Tasks>.Filter.Lt(i => i.DateDue,DateTime.Now);
+            var filter = Builders<Tasks>.Filter.And(Builders<Tasks>.Filter.Lt(i => i.DateDue, DateTime.Now), Builders<Tasks>.Filter.Ne(i => i.Status, StatusTask.Concluida));
+            List<Tasks> listTasks = taskConnection.Find(filter).SortBy(i => i.DateDue).ToList();
+            return listTasks;
+        }
+
     }
 }
