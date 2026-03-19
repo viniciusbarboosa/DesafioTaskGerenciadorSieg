@@ -4,6 +4,7 @@ using TaskManagerConsole.Api.Repository.Interfaces.Generic.Models;
 
 namespace TaskManagerConsole.Api.Models
 {
+    [BsonIgnoreExtraElements]
     public class Category: IEntity
     {
         public Category(string name,string color) { 

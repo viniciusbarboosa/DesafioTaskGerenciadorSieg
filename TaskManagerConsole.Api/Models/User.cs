@@ -6,8 +6,10 @@ using TaskManagerConsole.Api.Repository.Interfaces.Generic.Models;
 
 namespace TaskManagerConsole.Api.Models
 {
+    [BsonIgnoreExtraElements]
     public class User: IEntity
     {
+        
         public User(string name,string email) { 
             Name = name; 
             Email = email;

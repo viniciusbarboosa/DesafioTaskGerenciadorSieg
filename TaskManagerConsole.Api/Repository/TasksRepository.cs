@@ -39,6 +39,7 @@ namespace TaskManagerConsole.Api.Repository
 
         public List<TaskPopulatedDto> GetTasks()
         {
+            //TO DE AJUSTAR O ID RETORNA CREIO QUE TENTA TRANSFORMAR EM STRING PELO QUE VI
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
 
             var query = taskConnection.Aggregate()
