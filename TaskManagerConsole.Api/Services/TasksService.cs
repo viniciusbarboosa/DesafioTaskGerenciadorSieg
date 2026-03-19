@@ -6,24 +6,27 @@ using TaskManagerConsole.Api.DTOs.Tasks;
 using TaskManagerConsole.Api.Models;
 using TaskManagerConsole.Api.Models.Types;
 using TaskManagerConsole.Api.Repository.Interfaces;
+using TaskManagerConsole.Api.Repository.Interfaces.Generic.Interface;
 using static System.Net.WebRequestMethods;
 
 namespace TaskManagerConsole.Api.Services
 {
     public class TasksService
     {
+
+        //ANOTAÇÃO PRA GOLD NAO COLOQUEI TASK COMO GENERIC PORQUE TEM UNS METODOS BEM ESPECIFICOS
         public readonly ITasksRepository _tasksRepository;
-        public readonly IUserRepository _userRepository;
-        public readonly ICategoryRepository _categoryRepository;
-        public TasksService(ITasksRepository tasksRepository,IUserRepository userRepository,ICategoryRepository categoryRepository) {
+        public readonly IGenericRepository<User> _userRepository;
+        public readonly IGenericRepository<Category> _categoryRepository;
+        public TasksService(ITasksRepository tasksRepository,IGenericRepository<User> userRepository,IGenericRepository<Category> categoryRepository) {
             _tasksRepository = tasksRepository;
             _categoryRepository = categoryRepository;
             _userRepository = userRepository;
         }
 
-        public List<Tasks> GetTasks()
+        public List<TaskPopulatedDto> GetTasks()
         {
-            List<Tasks> listTasks = _tasksRepository.GetTasks();
+            List<TaskPopulatedDto> listTasks = _tasksRepository.GetTasks();
             return listTasks;
         }
 
@@ -49,13 +52,13 @@ namespace TaskManagerConsole.Api.Services
                 throw new Exception("Data não pode ser no passado");
             }
 
-            var categoryExists = _categoryRepository.GetCategoryById(taskDto.IdCategory);
+            var categoryExists = _categoryRepository.GetById(taskDto.IdCategory,"Category");
 
             if (categoryExists == null) {
                 throw new Exception("Categoria com esse Id não eixste");
             }
 
-            var userExists = _userRepository.GetUserById(taskDto.IdUser);
+            var userExists = _userRepository.GetById(taskDto.IdUser,"User");
 
             if (userExists == null) {
                 throw new Exception("Usuario com esse Id não existe");
@@ -80,10 +83,10 @@ namespace TaskManagerConsole.Api.Services
                 throw new Exception("Titulo Não pode ser Vazio");
             }
 
-            //if (editTaskDto.DateDue < DateTime.Now)
-            //{
-            //    throw new Exception("Data nao pode ser Menos que Data Atual");
-            //}
+            if (editTaskDto.DateDue < DateTime.Now)
+            {
+              throw new Exception("Data nao pode ser Menos que Data Atual");
+            }
 
             if (string.IsNullOrEmpty(editTaskDto.IdCategory)) {
                 throw new Exception("Categoria nao pode ser Vazia");
@@ -114,14 +117,14 @@ namespace TaskManagerConsole.Api.Services
                 statusTask = StatusTask.Cancelada;
             }
 
-            var categoryExists = _categoryRepository.GetCategoryById(editTaskDto.IdCategory);
+            var categoryExists = _categoryRepository.GetById(editTaskDto.IdCategory,"Category");
 
             if (categoryExists == null)
             {
                 throw new Exception("Categoria com esse Id não eixste");
             }
 
-            var userExists = _userRepository.GetUserById(editTaskDto.IdUser);
+            var userExists = _userRepository.GetById(editTaskDto.IdUser,"User");
 
             if (userExists == null)
             {
@@ -174,7 +177,7 @@ namespace TaskManagerConsole.Api.Services
                 throw new Exception("Não pode passar idCategory nulo");
             }
 
-            var categoryExists = _categoryRepository.GetCategoryById(idCategory);
+            var categoryExists = _categoryRepository.GetById(idCategory,"Category");
 
             if (categoryExists == null)
             {

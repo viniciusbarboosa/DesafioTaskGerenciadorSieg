@@ -18,12 +18,14 @@ namespace TaskManagerConsole.Api.Models
             IdUser = idUser;
         }
 
+        public Tasks() { }
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         [BsonElement("_id")]
         public ObjectId ObjectId { get; set; }
-        public string Title { get; private set; }
-        public string Description { get; private set; }
+        public string Title { get; set; }
+        public string Description { get;  set; }
         public DateTime DateDue { get; private set; }
         public DateTime? DateCompletion { get; private set; }
         public DateTime DateCreation { get; private set; }
@@ -41,6 +43,7 @@ namespace TaskManagerConsole.Api.Models
             IdUser = idUser;
         }
 
+        
 
     }
 }

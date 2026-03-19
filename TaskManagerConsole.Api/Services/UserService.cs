@@ -2,20 +2,21 @@
 using TaskManagerConsole.Api.Models;
 using TaskManagerConsole.Api.Repository;
 using TaskManagerConsole.Api.Repository.Interfaces;
+using TaskManagerConsole.Api.Repository.Interfaces.Generic.Interface;
 
 namespace TaskManagerConsole.Api.Services
 {
     public class UserService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IGenericRepository<User> _userRepository;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IGenericRepository<User> userRepository)
         {
             _userRepository = userRepository;
         }
         public List<User> GetUsers()
         {
-            List<User> listUsers = _userRepository.GetUers();
+            List<User> listUsers = _userRepository.Get("User");
             return listUsers;
         }
 
@@ -31,7 +32,7 @@ namespace TaskManagerConsole.Api.Services
                 throw new Exception("Usuario não pode ter Email vazio");
             }
 
-            var userExists = _userRepository.GetUserByName(user.Name);
+            var userExists = _userRepository.GetByName(user.Name,"User");
 
             if (userExists != null)
             {
@@ -40,7 +41,7 @@ namespace TaskManagerConsole.Api.Services
 
             User userSave = new User(user.Name,user.Email);
 
-            _userRepository.CreateUser(userSave);
+            _userRepository.Create(userSave,"User");
         }
     }
 }

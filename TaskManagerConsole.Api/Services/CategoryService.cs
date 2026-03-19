@@ -3,16 +3,17 @@ using TaskManagerConsole.Api.Models;
 using TaskManagerConsole.Api.Repository;
 using TaskManagerConsole.Api.Repository.Interfaces;
 using MongoDB.Bson;
+using TaskManagerConsole.Api.Repository.Interfaces.Generic.Interface;
 
 namespace TaskManagerConsole.Api.Services
 {
     public class CategoryService
     {
 
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly IGenericRepository<Category> _categoryRepository;
         private readonly ITasksRepository _tasksRepository;
 
-        public CategoryService(ICategoryRepository categoryRepository,ITasksRepository tasksRepository)
+        public CategoryService(IGenericRepository<Category> categoryRepository,ITasksRepository tasksRepository)
         {
             _categoryRepository = categoryRepository;
             _tasksRepository = tasksRepository;
@@ -20,7 +21,7 @@ namespace TaskManagerConsole.Api.Services
 
         public List<Category> GetCategories() 
         {
-            List<Category> listCategories = _categoryRepository.GetCategories();
+            List<Category> listCategories = _categoryRepository.Get("Category");
             return listCategories;
         }
 
@@ -31,7 +32,7 @@ namespace TaskManagerConsole.Api.Services
                 throw new Exception("Categoria não pode ter cor Vazia");
             }
 
-            var categoryExits = _categoryRepository.GetCategoryByName(categoryDto.Name);
+            var categoryExits = _categoryRepository.GetByName(categoryDto.Name, "Category");
 
             if (categoryExits != null)
             {
@@ -40,7 +41,7 @@ namespace TaskManagerConsole.Api.Services
 
             Category category = new Category(categoryDto.Name,categoryDto.Color);
 
-            _categoryRepository.CreateCategory(category);
+            _categoryRepository.Create(category,"Category");
 
         }
 
@@ -57,13 +58,13 @@ namespace TaskManagerConsole.Api.Services
                 throw new Exception("Não pode apagar Categoria estando ativa nas Tarefas");
             }
 
-            var exitsCategory = _categoryRepository.GetCategoryById(idCategory);
+            var exitsCategory = _categoryRepository.GetById(idCategory,"Category");
             if(exitsCategory == null)
             {
                 throw new Exception("Categoria não existe");
             }
 
-            _categoryRepository.DeleteCategory(new ObjectId(idCategory));
+            _categoryRepository.Delete(new ObjectId(idCategory),"Category");
 
         }
 

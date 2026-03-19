@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using TaskManagerConsole.Api.Contexts;
+using TaskManagerConsole.Api.DTOs.Tasks;
 using TaskManagerConsole.Api.Models;
 using TaskManagerConsole.Api.Models.Types;
 using TaskManagerConsole.Api.Repository.Interfaces;
@@ -36,12 +37,26 @@ namespace TaskManagerConsole.Api.Repository
             taskConnection.UpdateOne(filter,combineUpdate);
         }
 
-        public List<Tasks> GetTasks()
+        public List<TaskPopulatedDto> GetTasks()
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
-            var filter = Builders<Tasks>.Filter.Empty;
-            List<Tasks> listTasks = taskConnection.Find(filter).ToList();
-            return listTasks;
+
+            var query = taskConnection.Aggregate()
+              
+                .Lookup<Tasks, Category, TaskPopulatedDto>(
+                    _dbContext.GetCollection<Category>("Category"),
+                    t => t.IdCategory,      
+                    c => c.ObjectId,        
+                    tp => tp.CategoryDetails 
+                )
+                .Lookup<TaskPopulatedDto, User, TaskPopulatedDto>(
+                    _dbContext.GetCollection<User>("Users"),
+                    tp => tp.IdUser,        
+                    u => u.ObjectId,        
+                    tp => tp.UserDetails   
+                );
+
+            return query.ToList();
         }
 
         public Tasks GetById(string id)

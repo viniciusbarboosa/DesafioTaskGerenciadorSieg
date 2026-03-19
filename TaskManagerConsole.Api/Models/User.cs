@@ -1,10 +1,12 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System.Text.Json.Serialization;
 using TaskManagerConsole.Api.Models.Types;
-using MongoDB.Bson;
+using TaskManagerConsole.Api.Repository.Interfaces.Generic.Models;
 
 namespace TaskManagerConsole.Api.Models
 {
-    public class User
+    public class User: IEntity
     {
         public User(string name,string email) { 
             Name = name; 
@@ -14,8 +16,10 @@ namespace TaskManagerConsole.Api.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         [BsonElement("_id")]
-        public ObjectId ObjectId { get; private set; }
-        public string Name { get; private set; }
+        public ObjectId ObjectId { get; init; }
+        [JsonInclude]
+        public string Name { get; init; }
+        
         public string Email { get; private set; }
     }
 }

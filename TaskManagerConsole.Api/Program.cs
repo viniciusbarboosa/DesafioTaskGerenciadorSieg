@@ -1,9 +1,11 @@
-using TaskManagerConsole.Api.Contexts;
-using TaskManagerConsole.Api.Repository;
-using TaskManagerConsole.Api.Services;
 using Scalar.AspNetCore;
-using TaskManagerConsole.Api.Repository.Interfaces;
+using TaskManagerConsole.Api.Contexts;
 using TaskManagerConsole.Api.Models;
+using TaskManagerConsole.Api.Repository;
+using TaskManagerConsole.Api.Repository.Interfaces;
+using TaskManagerConsole.Api.Repository.Interfaces.Generic;
+using TaskManagerConsole.Api.Repository.Interfaces.Generic.Interface;
+using TaskManagerConsole.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,7 @@ builder.Services.AddScoped<TaskDbContext>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
 builder.Services.AddScoped<ITasksRepository, TasksRepository>();
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 //SERVICES
 builder.Services.AddScoped<UserService>();

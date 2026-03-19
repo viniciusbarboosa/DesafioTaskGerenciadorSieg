@@ -17,11 +17,11 @@ namespace TaskManagerConsole.Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Tasks>> Get()
+        public ActionResult<List<TaskPopulatedDto>> Get()
         {
             try
             {
-                List<Tasks> listTasks = _taskService.GetTasks();
+                List<TaskPopulatedDto> listTasks = _taskService.GetTasks();
                 return Ok(listTasks);
             } catch (Exception ex)
             {
