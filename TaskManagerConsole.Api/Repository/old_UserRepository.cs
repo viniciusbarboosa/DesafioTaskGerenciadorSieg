@@ -6,11 +6,11 @@ using TaskManagerConsole.Api.Repository.Interfaces;
 
 namespace TaskManagerConsole.Api.Repository
 {
-    public class UserRepository:IUserRepository
+    public class old_UserRepository:IUserRepository
     {
         private readonly TaskDbContext _dbContext;
 
-        public UserRepository(TaskDbContext taskDbContext)
+        public old_UserRepository(TaskDbContext taskDbContext)
         {
             _dbContext = taskDbContext;
         }

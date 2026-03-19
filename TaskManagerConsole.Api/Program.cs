@@ -19,7 +19,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped<TaskDbContext>();
 
 //REPOSITORIO
-builder.Services.AddScoped<IUserRepository,UserRepository>();
+builder.Services.AddScoped<IUserRepository,old_UserRepository>();
 builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
 builder.Services.AddScoped<ITasksRepository, TasksRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
