@@ -1,9 +1,9 @@
-﻿using TaskManagerConsole.Api.DTOs.Category;
-using TaskManagerConsole.Api.Models;
-using TaskManagerConsole.Api.Repository;
+﻿using TaskManagerConsole.Api.Repository;
 using TaskManagerConsole.Api.Repository.Interfaces;
 using MongoDB.Bson;
 using TaskManagerConsole.Api.Repository.Interfaces.Generic.Interface;
+using TaskManagerConsole.Api.DTOs.Category;
+using TaskManagerConsole.Api.Models;
 
 namespace TaskManagerConsole.Api.Services
 {
@@ -19,20 +19,26 @@ namespace TaskManagerConsole.Api.Services
             _tasksRepository = tasksRepository;
         }
 
-        public List<Category> GetCategories() 
+        public async Task<List<Category>> GetCategories() 
         {
-            List<Category> listCategories = _categoryRepository.Get("Category");
+            List<Category> listCategories = await _categoryRepository.Get("Category");
             return listCategories;
         }
 
-        public void CreateCategory(PostCategoryDto categoryDto)
+        public async Task<List<Category>> GetCategoriesListPaginate(int pageNumber, int pageSize)
+        {
+            List<Category> listCategories = await _categoryRepository.GetPaginate(pageNumber,pageSize,"Category");
+            return listCategories;
+        }
+
+        public async Task CreateCategory(PostCategoryDto categoryDto)
         {
             if (categoryDto.Name == "" || categoryDto.Name == null)
             {
                 throw new Exception("Categoria não pode ter cor Vazia");
             }
 
-            var categoryExits = _categoryRepository.GetByName(categoryDto.Name, "Category");
+            var categoryExits = await _categoryRepository.GetByName(categoryDto.Name, "Category");
 
             if (categoryExits != null)
             {
@@ -41,18 +47,18 @@ namespace TaskManagerConsole.Api.Services
 
             Category category = new Category(categoryDto.Name,categoryDto.Color);
 
-            _categoryRepository.Create(category,"Category");
+            await _categoryRepository.Create(category,"Category");
 
         }
 
-        public void DeleteCategory(string idCategory)
+        public async Task DeleteCategory(string idCategory)
         {
             if (string.IsNullOrEmpty(idCategory))
             {
                 throw new Exception("Categoria nao pode ser vazia");
             }
 
-            var listCategoryInTasks = _tasksRepository.GetTasksThatContainCategory(idCategory);
+            var listCategoryInTasks = await _tasksRepository.GetTasksThatContainCategory(idCategory);
             if(listCategoryInTasks.Count > 0)
             {
                 throw new Exception("Não pode apagar Categoria estando ativa nas Tarefas");

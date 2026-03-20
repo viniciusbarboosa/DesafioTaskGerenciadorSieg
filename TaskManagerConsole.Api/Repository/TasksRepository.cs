@@ -16,13 +16,13 @@ namespace TaskManagerConsole.Api.Repository
             _dbContext = dbContext;
         }
 
-        public void CreateTasks(Tasks task)
+        public async Task CreateTasks(Tasks task)
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
-            taskConnection.InsertOne(task);
+            await taskConnection.InsertOneAsync(task);
         }
 
-        public void EditTask(Tasks task)
+        public async Task EditTask(Tasks task)
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
             var filter = Builders<Tasks>.Filter.Eq(i => i.Id,task.Id);
@@ -34,12 +34,11 @@ namespace TaskManagerConsole.Api.Repository
             Builders<Tasks>.Update.Set(x => x.IdCategory, task.IdCategory),
             Builders<Tasks>.Update.Set(x => x.IdUser, task.IdUser)
             );
-            taskConnection.UpdateOne(filter,combineUpdate);
+            await taskConnection.UpdateOneAsync(filter,combineUpdate);
         }
 
-        public List<TaskPopulatedDto> GetTasks()
+        public async Task<List<TaskPopulatedDto>> GetTasks()
         {
-            //TO DE AJUSTAR O ID RETORNA CREIO QUE TENTA TRANSFORMAR EM STRING PELO QUE VI
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
 
             var query = taskConnection.Aggregate()
@@ -57,33 +56,57 @@ namespace TaskManagerConsole.Api.Repository
                     tp => tp.UserDetails   
                 );
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public Tasks GetById(string id)
+        public async Task<List<TaskPopulatedDto>> GetTasks(int pageNumber, int pageSize)
+        {
+            var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
+
+            var query = taskConnection.Aggregate()
+
+                .Lookup<Tasks, Category, TaskPopulatedDto>(
+                    _dbContext.GetCollection<Category>("Category"),
+                    t => t.IdCategory,
+                    c => c.Id,
+                    tp => tp.CategoryDetails
+                )
+                .Lookup<TaskPopulatedDto, User, TaskPopulatedDto>(
+                    _dbContext.GetCollection<User>("User"),
+                    tp => tp.IdUser,
+                    u => u.Id,
+                    tp => tp.UserDetails
+                ).Skip((pageNumber - 1)*pageSize)
+                .Limit(pageSize)
+                ;
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<Tasks> GetById(string id)
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
             var filter = Builders<Tasks>.Filter.Eq(i => i.Id,id);
-            Tasks task = taskConnection.Find(filter).FirstOrDefault();
+            Tasks task = await taskConnection.Find(filter).FirstOrDefaultAsync();
             return task;
         }
 
-        public List<Tasks> GetTasksThatContainCategory(string objectId)
+        public async Task<List<Tasks>> GetTasksThatContainCategory(string objectId)
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
             var filter = Builders<Tasks>.Filter.Eq(i => i.IdCategory,objectId);
-            List<Tasks> listTasks = taskConnection.Find(filter).ToList();
+            List<Tasks> listTasks = await taskConnection.Find(filter).ToListAsync();
             return listTasks;
         }
 
-        public void DeleteTasks(string idTask)
+        public async Task DeleteTasks(string idTask)
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
             var filter = Builders<Tasks>.Filter.Eq(i => i.Id,idTask);
-            taskConnection.DeleteOne(filter);
+            await taskConnection.DeleteOneAsync(filter);
         }
 
-        public void CompleteTasks(string idTask)
+        public async Task CompleteTasks(string idTask)
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
             var filter = Builders<Tasks>.Filter.Eq(i => i.Id, idTask);
@@ -91,39 +114,39 @@ namespace TaskManagerConsole.Api.Repository
             Builders<Tasks>.Update.Set(x => x.Status,StatusTask.Concluida),
             Builders<Tasks>.Update.Set(x => x.DateCompletion,DateTime.Now)
             );
-            taskConnection.UpdateOne(filter,combineUpdate);
+            await taskConnection.UpdateOneAsync(filter,combineUpdate);
         }
 
-        public List<Tasks> GetTaskCategory(string idCategory)
+        public async Task<List<Tasks>> GetTaskCategory(string idCategory)
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
             var filter = Builders<Tasks>.Filter.Eq(i =>i.IdCategory,idCategory);
-            List<Tasks> listTasks = taskConnection.Find(filter).ToList();
+            List<Tasks> listTasks = await taskConnection.Find(filter).ToListAsync();
             return listTasks;
         }
 
-        public List<Tasks> GetTaskStatus(StatusTask statusTask)
+        public async Task<List<Tasks>> GetTaskStatus(StatusTask statusTask)
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
             var filter = Builders<Tasks>.Filter.Eq(i => i.Status,statusTask);
-            List<Tasks> listTasks = taskConnection.Find(filter).ToList();
+            List<Tasks> listTasks = await taskConnection.Find(filter).ToListAsync();
             return listTasks;
         }
 
-        public List<Tasks> GetTasksOrderedDueDate()
+        public async Task<List<Tasks>> GetTasksOrderedDueDate()
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
             var filter = Builders<Tasks>.Filter.Empty;
-            List<Tasks> listTasks = taskConnection.Find(filter).SortBy(i => i.DateDue).ToList();
+            List<Tasks> listTasks = await taskConnection.Find(filter).SortBy(i => i.DateDue).ToListAsync();
             return listTasks;
         }
 
-        public List<Tasks> GetTasksOverdue()
+        public async Task<List<Tasks>> GetTasksOverdue()
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
             //var filter = Builders<Tasks>.Filter.Lt(i => i.DateDue,DateTime.Now);
             var filter = Builders<Tasks>.Filter.And(Builders<Tasks>.Filter.Lt(i => i.DateDue, DateTime.Now), Builders<Tasks>.Filter.Ne(i => i.Status, StatusTask.Concluida));
-            List<Tasks> listTasks = taskConnection.Find(filter).SortBy(i => i.DateDue).ToList();
+            List<Tasks> listTasks = await taskConnection.Find(filter).SortBy(i => i.DateDue).ToListAsync();
             return listTasks;
         }
 

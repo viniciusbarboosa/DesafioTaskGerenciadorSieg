@@ -16,41 +16,53 @@ namespace TaskManagerConsole.Api.Repository.Interfaces.Generic
             _dbContext = dbContext;
         }
 
-        public List<T> Get(string collection)
+        public async Task<List<T>> Get(string collection)
         {
             var connection = _dbContext.GetCollection<T>(collection);
             var filter = Builders<T>.Filter.Empty;
-            List<T> list = connection.Find(filter).ToList();
+            List<T> list = await connection.Find(filter).ToListAsync();
             return list;
         }
 
-        public T GetByName(string name,string collection)
+        public async Task<List<T>> GetPaginate(int pageNumber, int pageSize,string collection)
+        {
+            var connection = _dbContext.GetCollection<T>(collection);
+            var filter = Builders<T>.Filter.Empty;
+            List<T> list = await connection.Find(filter)
+                .Skip((pageNumber - 1) * pageSize)
+                .Limit(pageSize)
+                .ToListAsync();
+                
+            return list;
+        }
+
+        public async Task<T> GetByName(string name,string collection)
         {
             var connection = _dbContext.GetCollection<T>(collection);
             var filter = Builders<T>.Filter.Eq(i => i.Name, name);
-            T list = connection.Find(filter).FirstOrDefault();
+            T list = await connection.Find(filter).FirstOrDefaultAsync();
             return list;
         }
 
-        public T GetById(string id,string collection)
+        public async Task<T> GetById(string id,string collection)
         {
             var connection = _dbContext.GetCollection<T>(collection);
             var filter = Builders<T>.Filter.Eq(i => i.Id, id);
-            T typeClass = connection.Find(filter).FirstOrDefault();
+            T typeClass = await connection.Find(filter).FirstOrDefaultAsync();
             return typeClass;
         }
 
-        public void Create(T type,string collection)
+        public async Task Create(T type,string collection)
         {
             var connection = _dbContext.GetCollection<T>(collection);
-            connection.InsertOne(type);
+            await connection.InsertOneAsync(type);
         }
 
-        public void Delete(string id,string collection)
+        public async Task Delete(string id,string collection)
         {
             var connection = _dbContext.GetCollection<T>(collection);
             var filter = Builders<T>.Filter.Eq(i => i.Id, id);
-            connection.DeleteOne(filter);
+            await connection.DeleteOneAsync(filter);
         }
 
         

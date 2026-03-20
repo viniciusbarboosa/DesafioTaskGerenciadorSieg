@@ -14,7 +14,7 @@ namespace TaskManagerConsole.Api.Services
     public class TasksService
     {
 
-        //ANOTAÇÃO PRA GOLD NAO COLOQUEI TASK COMO GENERIC PORQUE TEM UNS METODOS BEM ESPECIFICOS
+        //ANOTAÇÃO PRA GOLD => NAO COLOQUEI TASK COMO GENERIC PORQUE TEM UNS METODOS BEM ESPECIFICOS
         public readonly ITasksRepository _tasksRepository;
         public readonly IGenericRepository<User> _userRepository;
         public readonly IGenericRepository<Category> _categoryRepository;
@@ -24,13 +24,19 @@ namespace TaskManagerConsole.Api.Services
             _userRepository = userRepository;
         }
 
-        public List<TaskPopulatedDto> GetTasks()
+        public async Task<List<TaskPopulatedDto>> GetTasks()
         {
-            List<TaskPopulatedDto> listTasks = _tasksRepository.GetTasks();
+            List<TaskPopulatedDto> listTasks = await _tasksRepository.GetTasks();
             return listTasks;
         }
 
-        public void CreateTasks(PostTasksDto taskDto)
+        public async Task<List<TaskPopulatedDto>> GetTaksPaginate(int pageNumber,int pageSize)
+        {
+            List<TaskPopulatedDto> listTasks = await _tasksRepository.GetTasks(pageNumber,pageSize);
+            return listTasks;
+        }
+
+        public async Task CreateTasks(PostTasksDto taskDto)
         {
             if (string.IsNullOrEmpty(taskDto.Title))
             {
@@ -52,23 +58,23 @@ namespace TaskManagerConsole.Api.Services
                 throw new Exception("Data não pode ser no passado");
             }
 
-            var categoryExists = _categoryRepository.GetById(taskDto.IdCategory,"Category");
+            var categoryExists = await _categoryRepository.GetById(taskDto.IdCategory,"Category");
 
             if (categoryExists == null) {
                 throw new Exception("Categoria com esse Id não eixste");
             }
 
-            var userExists = _userRepository.GetById(taskDto.IdUser,"User");
+            var userExists = await _userRepository.GetById(taskDto.IdUser,"User");
 
             if (userExists == null) {
                 throw new Exception("Usuario com esse Id não existe");
             }
 
             Tasks task = new Tasks(taskDto.Title, taskDto.Description, taskDto.DateDue, taskDto.IdCategory, taskDto.IdUser);
-            _tasksRepository.CreateTasks(task);
+            await _tasksRepository.CreateTasks(task);
         }
 
-        public void EditTask(EditTasksDto editTaskDto)
+        public async Task EditTask(EditTasksDto editTaskDto)
         {
 
             if (string.IsNullOrEmpty(editTaskDto.Title))
@@ -115,30 +121,30 @@ namespace TaskManagerConsole.Api.Services
                 statusTask = StatusTask.Cancelada;
             }
 
-            var categoryExists = _categoryRepository.GetById(editTaskDto.IdCategory,"Category");
+            var categoryExists = await _categoryRepository.GetById(editTaskDto.IdCategory,"Category");
 
             if (categoryExists == null)
             {
                 throw new Exception("Categoria com esse Id não eixste");
             }
 
-            var userExists = _userRepository.GetById(editTaskDto.IdUser,"User");
+            var userExists = await _userRepository.GetById(editTaskDto.IdUser,"User");
 
             if (userExists == null)
             {
                 throw new Exception("Usuario com esse Id não existe");
             }
 
-            Tasks taskDb = _tasksRepository.GetById(editTaskDto.ObjectId);
+            Tasks taskDb = await _tasksRepository.GetById(editTaskDto.ObjectId);
 
             taskDb.AtualizarTask(editTaskDto.Title,editTaskDto.Description,editTaskDto.DateDue,statusTask, editTaskDto.IdCategory, editTaskDto.IdUser);
 
-            _tasksRepository.EditTask(taskDb);
+            await _tasksRepository.EditTask(taskDb);
         }
 
-        public void DeleteTask(string id)
+        public async Task DeleteTask(string id)
         {
-            Tasks task = _tasksRepository.GetById(id);
+            Tasks task = await _tasksRepository.GetById(id);
             if (task == null)
             {
                 throw new Exception("Tarefa com esse id não existe então nao e possiveel excluir");
@@ -149,26 +155,26 @@ namespace TaskManagerConsole.Api.Services
                 throw new Exception("Erro id não inserido");
             }
 
-            _tasksRepository.DeleteTasks(id);
+            await _tasksRepository.DeleteTasks(id);
         }
 
-        public void CompleteTask(string idTask)
+        public async Task CompleteTask(string idTask)
         {
             if(idTask == null)
             {
                 throw new Exception("Não pode passar tarefa nula.");
             }
 
-            Tasks task = _tasksRepository.GetById(idTask);
+            Tasks task = await _tasksRepository.GetById(idTask);
             if (task == null)
             {
                 throw new Exception("Tarefa com esse id não existe então nao e possiveel excluir");
             }
 
-            _tasksRepository.CompleteTasks(idTask);
+            await _tasksRepository.CompleteTasks(idTask);
         }
 
-        public List<Tasks> ListTaskCategory(string idCategory)
+        public async Task<List<Tasks>> ListTaskCategory(string idCategory)
         {
             if (string.IsNullOrEmpty(idCategory))
             {
@@ -182,13 +188,13 @@ namespace TaskManagerConsole.Api.Services
                 throw new Exception("Categoria com esse Id não eixste");
             }
 
-            List<Tasks> listTasks = _tasksRepository.GetTaskCategory(idCategory);
+            List<Tasks> listTasks = await _tasksRepository.GetTaskCategory(idCategory);
 
             return listTasks;
 
         }
 
-        public List<Tasks> ListTaskStatus(string status)
+        public async Task<List<Tasks>> ListTaskStatus(string status)
         {
             if (string.IsNullOrEmpty(status))
             {
@@ -217,19 +223,19 @@ namespace TaskManagerConsole.Api.Services
                 throw new Exception("status invalido");
             }
 
-            List<Tasks> listTasks = _tasksRepository.GetTaskStatus(statusTask);
+            List<Tasks> listTasks = await _tasksRepository.GetTaskStatus(statusTask);
             return listTasks;
         }
 
-        public List<Tasks> GetTasksOrderedDueDate()
+        public async Task<List<Tasks>> GetTasksOrderedDueDate()
         {
-            List<Tasks> listTasks = _tasksRepository.GetTasksOrderedDueDate();
+            List<Tasks> listTasks = await _tasksRepository.GetTasksOrderedDueDate();
             return listTasks;
         }
 
-        public List<Tasks> GetTasksOverdue()
+        public async Task<List<Tasks>> GetTasksOverdue()
         {
-            List<Tasks> listTasks = _tasksRepository.GetTasksOverdue();
+            List<Tasks> listTasks = await _tasksRepository.GetTasksOverdue();
             return listTasks;
         }
 

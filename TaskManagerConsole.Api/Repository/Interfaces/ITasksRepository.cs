@@ -8,17 +8,18 @@ namespace TaskManagerConsole.Api.Repository.Interfaces
 {
     public interface ITasksRepository
     {
-        public void CreateTasks(Tasks task);
-        public List<TaskPopulatedDto> GetTasks();
-        public Tasks GetById(string id);
-        public List<Tasks> GetTasksThatContainCategory(string objectId);
-        public void DeleteTasks(string idTask);
-        public void EditTask(Tasks task);
-        public void CompleteTasks(string id);
-        public List<Tasks> GetTaskCategory(string idCategory);
-        public List<Tasks> GetTaskStatus(StatusTask statusTask);
-        public List<Tasks> GetTasksOrderedDueDate();
-        public List<Tasks> GetTasksOverdue();
+        public Task CreateTasks(Tasks task);
+        public Task<List<TaskPopulatedDto>> GetTasks();
+        public Task<List<TaskPopulatedDto>> GetTasks(int pageNumber ,int pageSize);
+        public Task<Tasks> GetById(string id);
+        public Task<List<Tasks>> GetTasksThatContainCategory(string objectId);
+        public Task DeleteTasks(string idTask);
+        public Task EditTask(Tasks task);
+        public Task CompleteTasks(string id);
+        public Task<List<Tasks>> GetTaskCategory(string idCategory);
+        public Task<List<Tasks>> GetTaskStatus(StatusTask statusTask);
+        public Task<List<Tasks>> GetTasksOrderedDueDate();
+        public Task<List<Tasks>> GetTasksOverdue();
     }
 
 }

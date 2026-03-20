@@ -17,11 +17,11 @@ namespace TaskManagerConsole.Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<TaskPopulatedDto>> Get()
+        public async Task<ActionResult<List<TaskPopulatedDto>>> Get()
         {
             try
             {
-                List<TaskPopulatedDto> listTasks = _taskService.GetTasks();
+                List<TaskPopulatedDto> listTasks = await _taskService.GetTasks();
                 return Ok(listTasks);
             } catch (Exception ex)
             {
@@ -34,12 +34,30 @@ namespace TaskManagerConsole.Api.Controllers
             }
         }
 
+        [HttpGet("Paginate/{pageNumber}/{pageSize}")]
+        public async Task<ActionResult<List<TaskPopulatedDto>>> GetPaginate(int pageNumber, int pageSize) {
+            try
+            {
+                List<TaskPopulatedDto> listTasks = await _taskService.GetTaksPaginate(pageNumber, pageSize);
+                return Ok(listTasks);
+            }
+            catch (Exception ex)
+            {
+                if (!string.IsNullOrEmpty(ex.Message))
+                {
+                    return BadRequest(ex.Message);
+                }
+
+                return BadRequest("Erro ao criar pegar lista de Tarefas");
+            }
+        }
+
         [HttpPost]
-        public ActionResult Post([FromBody] PostTasksDto tasksDto)
+        public async Task<ActionResult> Post([FromBody] PostTasksDto tasksDto)
         {
             try
             {
-                _taskService.CreateTasks(tasksDto);
+                await _taskService.CreateTasks(tasksDto);
                 return Ok(new { message = "Tarefa Criada com sucesso" });
             }
             catch (Exception ex) {
@@ -53,11 +71,11 @@ namespace TaskManagerConsole.Api.Controllers
         }
 
         [HttpPut]
-        public ActionResult Put(EditTasksDto editTaskDto)
+        public async Task<ActionResult> Put(EditTasksDto editTaskDto)
         {
             try
             {
-                _taskService.EditTask(editTaskDto);
+                await _taskService.EditTask(editTaskDto);
                 return Ok(new { message = "Tarefa " + editTaskDto.Title + " Editada com Sucesso" });
             }
             catch (Exception ex) {
@@ -73,10 +91,10 @@ namespace TaskManagerConsole.Api.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public ActionResult Delete(string id) {
+        public async Task<ActionResult> Delete(string id) {
             try
             {
-                _taskService.DeleteTask(id);
+                await _taskService.DeleteTask(id);
                 return Ok(new { message = "Tarefa Excluida com Sucesso" });
             }
             catch (Exception ex) {
@@ -92,11 +110,11 @@ namespace TaskManagerConsole.Api.Controllers
         }
 
         [HttpPost("CompleteTask/{id}")]
-        public ActionResult PostCompleteTask(string id)
+        public async Task<ActionResult> PostCompleteTask(string id)
         {
             try
             {
-                _taskService.CompleteTask(id);
+                await _taskService.CompleteTask(id);
                 return Ok(new { message = "Tarefa Completada com Sucesso"});
             }catch(Exception ex)
             {
@@ -110,11 +128,11 @@ namespace TaskManagerConsole.Api.Controllers
         }
 
         [HttpGet("ListTaskCategory/{idCategory}")]
-        public ActionResult<List<Tasks>> GetTaskCategory(string idCategory)
+        public async Task<ActionResult<List<Tasks>>> GetTaskCategory(string idCategory)
         {
             try
             {
-                List<Tasks> listTasks = _taskService.ListTaskCategory(idCategory);
+                List<Tasks> listTasks = await _taskService.ListTaskCategory(idCategory);
                 return Ok(listTasks);
             }catch(Exception ex)
             {
@@ -129,11 +147,11 @@ namespace TaskManagerConsole.Api.Controllers
         }
 
         [HttpGet("ListTaskStatus/{status}")]
-        public ActionResult<List<Tasks>> GetTaskStatus(string status)
+        public async Task<ActionResult<List<Tasks>>> GetTaskStatus(string status)
         {
             try
             {
-                List<Tasks> listTasks = _taskService.ListTaskStatus(status);
+                List<Tasks> listTasks = await _taskService.ListTaskStatus(status);
                 return Ok(listTasks);
             }catch(Exception ex)
             {
@@ -147,11 +165,11 @@ namespace TaskManagerConsole.Api.Controllers
         }
 
         [HttpGet("ListOrderedDueDate")]
-        public ActionResult<List<Tasks>> GetTasksOrderedDueDate()
+        public async Task<ActionResult<List<Tasks>>> GetTasksOrderedDueDate()
         {
             try
             {
-                List<Tasks> listTasks = _taskService.GetTasksOrderedDueDate();
+                List<Tasks> listTasks = await _taskService.GetTasksOrderedDueDate();
                 return Ok(listTasks);
             }
             catch (Exception ex) {
@@ -165,11 +183,11 @@ namespace TaskManagerConsole.Api.Controllers
         }
 
         [HttpGet("ListOverdueTasks")]
-        public ActionResult<List<Tasks>> GetTasksOverdue()
+        public async Task<ActionResult<List<Tasks>>> GetTasksOverdue()
         {
             try
             {
-                List<Tasks> listTasks = _taskService.GetTasksOverdue();
+                List<Tasks> listTasks = await _taskService.GetTasksOverdue();
                 return Ok(listTasks);
             }
             catch (Exception ex) {

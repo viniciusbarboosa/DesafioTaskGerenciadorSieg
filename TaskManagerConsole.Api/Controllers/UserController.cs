@@ -20,14 +20,45 @@ namespace TaskManagerConsole.Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<User>> Get()
+        public async Task<ActionResult<List<User>>> Get()
         {
-            List<User> users = _userServices.GetUsers();
-            return Ok(users);
+            try
+            {
+                List<User> users = await _userServices.GetUsers();
+                return Ok(users);
+            }
+            catch(Exception ex)
+            {
+                if (!string.IsNullOrEmpty(ex.Message))
+                {
+                    return BadRequest(new { message = ex.Message });
+                }
+                return BadRequest(new { message = "Erro ao Listar Usuario" });
+            }
+            
+        }
+
+        [HttpGet("Paginate/{pageNumber}/{pageSize}")]
+        public async Task<ActionResult<List<User>>> GetPaginate(int pageNumber,int pageSize)
+        {
+            try
+            {
+                List<User> users = await _userServices.GetUsersListPaginate(pageNumber,pageSize);
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                if (!string.IsNullOrEmpty(ex.Message))
+                {
+                    return BadRequest(new { message = ex.Message });
+                }
+                return BadRequest(new { message = "Erro ao Listar Usuario" });
+            }
+
         }
 
         [HttpPost]
-        public ActionResult<User> Post(PostUserDto user)
+        public async Task<ActionResult<User>> Post(PostUserDto user)
         {
             if(user == null)
             {
@@ -36,7 +67,7 @@ namespace TaskManagerConsole.Api.Controllers
 
             try
             {
-                _userServices.PostUsers(user);
+                await _userServices.PostUsers(user);
                 return Ok(user);
             }
             catch (Exception ex) {

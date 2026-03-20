@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagerConsole.Api.DTOs.Category;
+using TaskManagerConsole.Api.Models;
 using TaskManagerConsole.Api.Repository;
 using TaskManagerConsole.Api.Services;
 
@@ -17,17 +18,47 @@ namespace TaskManagerConsole.Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult Get() {
-            var listCategories = _categoryService.GetCategories();
-            return Ok(listCategories);
+        public async Task<ActionResult> Get() {
+            try
+            {
+                var listCategories = await _categoryService.GetCategories();
+                return Ok(listCategories);
+            }
+            catch (Exception ex) {
+                if (!string.IsNullOrEmpty(ex.Message))
+                {
+                    return BadRequest(new { message = ex.Message });
+                }
+                return BadRequest(new { message = "Erro ao Listar Categoria" });
+            }
+
         }
 
-        [HttpPost]
-        public ActionResult Post(PostCategoryDto categoryDto)
+        [HttpGet("Paginate/{pageNumber}/{pageSize}")]
+        public async Task<ActionResult<List<User>>> GetPaginate(int pageNumber, int pageSize)
         {
             try
             {
-                _categoryService.CreateCategory(categoryDto);
+                List<Category> users = await _categoryService.GetCategoriesListPaginate(pageNumber, pageSize);
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                if (!string.IsNullOrEmpty(ex.Message))
+                {
+                    return BadRequest(new { message = ex.Message });
+                }
+                return BadRequest(new { message = "Erro ao Listar Usuario" });
+            }
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Post(PostCategoryDto categoryDto)
+        {
+            try
+            {
+                await _categoryService.CreateCategory(categoryDto);
                 return Ok(new { category=categoryDto,message="Categoria Criada com Sucesso" });
             }
             catch (Exception ex)
@@ -42,11 +73,11 @@ namespace TaskManagerConsole.Api.Controllers
 
         [HttpDelete]
         [Route("{idCategory}")]
-        public ActionResult Delete(string idCategory)
+        public async Task<ActionResult> Delete(string idCategory)
         {
             try
             {
-                _categoryService.DeleteCategory(idCategory);
+                await _categoryService.DeleteCategory(idCategory);
                 return Ok(new { message = "Categoria Deletada Com Sucesso"});
             }catch(Exception ex)
             {
