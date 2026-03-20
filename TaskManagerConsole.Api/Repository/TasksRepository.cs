@@ -68,7 +68,7 @@ namespace TaskManagerConsole.Api.Repository
             return task;
         }
 
-        public List<Tasks> GetTasksThatContainCategory(ObjectId objectId)
+        public List<Tasks> GetTasksThatContainCategory(string objectId)
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
             var filter = Builders<Tasks>.Filter.Eq(i => i.IdCategory,objectId);
@@ -94,7 +94,7 @@ namespace TaskManagerConsole.Api.Repository
             taskConnection.UpdateOne(filter,combineUpdate);
         }
 
-        public List<Tasks> GetTaskCategory(ObjectId idCategory)
+        public List<Tasks> GetTaskCategory(string idCategory)
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
             var filter = Builders<Tasks>.Filter.Eq(i =>i.IdCategory,idCategory);

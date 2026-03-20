@@ -47,7 +47,7 @@ namespace TaskManagerConsole.Api.Controllers
             try
             {
                 _categoryService.DeleteCategory(idCategory);
-                return Ok(new { message = "Categoria Criada Com Sucesso"});
+                return Ok(new { message = "Categoria Deletada Com Sucesso"});
             }catch(Exception ex)
             {
                 if (!string.IsNullOrEmpty(ex.Message))

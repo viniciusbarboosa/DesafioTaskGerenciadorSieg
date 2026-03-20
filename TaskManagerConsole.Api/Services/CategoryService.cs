@@ -52,7 +52,7 @@ namespace TaskManagerConsole.Api.Services
                 throw new Exception("Categoria nao pode ser vazia");
             }
 
-            var listCategoryInTasks = _tasksRepository.GetTasksThatContainCategory(new ObjectId(idCategory));
+            var listCategoryInTasks = _tasksRepository.GetTasksThatContainCategory(idCategory);
             if(listCategoryInTasks.Count > 0)
             {
                 throw new Exception("Não pode apagar Categoria estando ativa nas Tarefas");

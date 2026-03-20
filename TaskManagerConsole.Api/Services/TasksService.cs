@@ -64,9 +64,7 @@ namespace TaskManagerConsole.Api.Services
                 throw new Exception("Usuario com esse Id não existe");
             }
 
-            var idCategory = new ObjectId(taskDto.IdCategory);
-            var idUser = new ObjectId(taskDto.IdUser);
-            Tasks task = new Tasks(taskDto.Title, taskDto.Description, taskDto.DateDue,idCategory,idUser);
+            Tasks task = new Tasks(taskDto.Title, taskDto.Description, taskDto.DateDue, taskDto.IdCategory, taskDto.IdUser);
             _tasksRepository.CreateTasks(task);
         }
 
@@ -133,7 +131,7 @@ namespace TaskManagerConsole.Api.Services
 
             Tasks taskDb = _tasksRepository.GetById(editTaskDto.ObjectId);
 
-            taskDb.AtualizarTask(editTaskDto.Title,editTaskDto.Description,editTaskDto.DateDue,statusTask, new ObjectId(editTaskDto.IdCategory), new ObjectId(editTaskDto.IdUser));
+            taskDb.AtualizarTask(editTaskDto.Title,editTaskDto.Description,editTaskDto.DateDue,statusTask, editTaskDto.IdCategory, editTaskDto.IdUser);
 
             _tasksRepository.EditTask(taskDb);
         }
@@ -184,7 +182,7 @@ namespace TaskManagerConsole.Api.Services
                 throw new Exception("Categoria com esse Id não eixste");
             }
 
-            List<Tasks> listTasks = _tasksRepository.GetTaskCategory(new ObjectId(idCategory));
+            List<Tasks> listTasks = _tasksRepository.GetTaskCategory(idCategory);
 
             return listTasks;
 

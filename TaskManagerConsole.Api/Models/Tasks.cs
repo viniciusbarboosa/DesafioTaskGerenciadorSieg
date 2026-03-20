@@ -7,7 +7,7 @@ namespace TaskManagerConsole.Api.Models
     [BsonIgnoreExtraElements]
     public class Tasks
     {
-        public Tasks(string title, string description, DateTime dateDue, ObjectId idCategory, ObjectId idUser)
+        public Tasks(string title, string description, DateTime dateDue, string idCategory, string idUser)
         {
             Title = title;
             Description = description;
@@ -29,10 +29,12 @@ namespace TaskManagerConsole.Api.Models
         public DateTime? DateCompletion { get; private set; }
         public DateTime DateCreation { get; private set; }
         public StatusTask Status { get; private set; }
-        public ObjectId IdCategory { get; private set; }
-        public ObjectId IdUser { get; private set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string IdCategory { get; set; } = ObjectId.GenerateNewId().ToString();
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string IdUser { get; set; } = ObjectId.GenerateNewId().ToString();
 
-        public void AtualizarTask(string title,string description,DateTime dateDue,StatusTask status,ObjectId idCategory,ObjectId idUser)
+        public void AtualizarTask(string title,string description,DateTime dateDue,StatusTask status,string idCategory,string idUser)
         {
             Title = title;
             Description = description;
