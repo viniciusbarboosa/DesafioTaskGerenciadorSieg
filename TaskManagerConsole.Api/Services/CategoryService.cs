@@ -64,7 +64,7 @@ namespace TaskManagerConsole.Api.Services
                 throw new Exception("Categoria não existe");
             }
 
-            _categoryRepository.Delete(new ObjectId(idCategory),"Category");
+            _categoryRepository.Delete(idCategory,"Category");
 
         }
 

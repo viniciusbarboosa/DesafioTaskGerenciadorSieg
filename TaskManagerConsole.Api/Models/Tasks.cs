@@ -22,8 +22,7 @@ namespace TaskManagerConsole.Api.Models
 
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        [BsonElement("_id")]
-        public ObjectId ObjectId { get; set; }
+        public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
         public string Title { get; set; }
         public string Description { get;  set; }
         public DateTime DateDue { get; private set; }

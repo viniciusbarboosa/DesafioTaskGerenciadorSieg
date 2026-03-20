@@ -33,7 +33,7 @@ namespace TaskManagerConsole.Api.Repository
         public Category GetCategoryById(string id)
         {
             var categoryConnection = _dbContext.GetCollection<Category>("Category");
-            var filter = Builders<Category>.Filter.Eq(i => i.ObjectId, new ObjectId(id));
+            var filter = Builders<Category>.Filter.Eq(i => i.Id, id);
             Category category = categoryConnection.Find(filter).FirstOrDefault();
             return category;
         }
@@ -44,9 +44,9 @@ namespace TaskManagerConsole.Api.Repository
             categoryConnection.InsertOne(category);
         }
 
-        public void DeleteCategory(ObjectId id){
+        public void DeleteCategory(string id){
             var categoryConnection = _dbContext.GetCollection<Category>("Category");
-            var filter = Builders<Category>.Filter.Eq(i => i.ObjectId, id);
+            var filter = Builders<Category>.Filter.Eq(i => i.Id, id);
             categoryConnection.DeleteOne(filter);
         }
     }

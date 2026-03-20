@@ -14,7 +14,7 @@ namespace TaskManagerConsole.Api.Repository.Interfaces
         public List<Tasks> GetTasksThatContainCategory(ObjectId objectId);
         public void DeleteTasks(string idTask);
         public void EditTask(Tasks task);
-        public void CompleteTasks(ObjectId id);
+        public void CompleteTasks(string id);
         public List<Tasks> GetTaskCategory(ObjectId idCategory);
         public List<Tasks> GetTaskStatus(StatusTask statusTask);
         public List<Tasks> GetTasksOrderedDueDate();

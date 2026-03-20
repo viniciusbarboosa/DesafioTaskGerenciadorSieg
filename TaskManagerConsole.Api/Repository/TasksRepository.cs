@@ -25,7 +25,7 @@ namespace TaskManagerConsole.Api.Repository
         public void EditTask(Tasks task)
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
-            var filter = Builders<Tasks>.Filter.Eq(i => i.ObjectId,task.ObjectId);
+            var filter = Builders<Tasks>.Filter.Eq(i => i.Id,task.Id);
             var combineUpdate = Builders<Tasks>.Update.Combine(
             Builders<Tasks>.Update.Set(x => x.Title, task.Title),
             Builders<Tasks>.Update.Set(x => x.Description, task.Description),
@@ -47,13 +47,13 @@ namespace TaskManagerConsole.Api.Repository
                 .Lookup<Tasks, Category, TaskPopulatedDto>(
                     _dbContext.GetCollection<Category>("Category"),
                     t => t.IdCategory,      
-                    c => c.ObjectId,        
+                    c => c.Id,        
                     tp => tp.CategoryDetails 
                 )
                 .Lookup<TaskPopulatedDto, User, TaskPopulatedDto>(
                     _dbContext.GetCollection<User>("User"),
                     tp => tp.IdUser,        
-                    u => u.ObjectId,        
+                    u => u.Id,        
                     tp => tp.UserDetails   
                 );
 
@@ -63,7 +63,7 @@ namespace TaskManagerConsole.Api.Repository
         public Tasks GetById(string id)
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
-            var filter = Builders<Tasks>.Filter.Eq(i => i.ObjectId,new ObjectId(id));
+            var filter = Builders<Tasks>.Filter.Eq(i => i.Id,id);
             Tasks task = taskConnection.Find(filter).FirstOrDefault();
             return task;
         }
@@ -79,14 +79,14 @@ namespace TaskManagerConsole.Api.Repository
         public void DeleteTasks(string idTask)
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
-            var filter = Builders<Tasks>.Filter.Eq(i => i.ObjectId,new ObjectId(idTask));
+            var filter = Builders<Tasks>.Filter.Eq(i => i.Id,idTask);
             taskConnection.DeleteOne(filter);
         }
 
-        public void CompleteTasks(ObjectId idTask)
+        public void CompleteTasks(string idTask)
         {
             var taskConnection = _dbContext.GetCollection<Tasks>("Tasks");
-            var filter = Builders<Tasks>.Filter.Eq(i => i.ObjectId, idTask);
+            var filter = Builders<Tasks>.Filter.Eq(i => i.Id, idTask);
             var combineUpdate = Builders<Tasks>.Update.Combine(
             Builders<Tasks>.Update.Set(x => x.Status,StatusTask.Concluida),
             Builders<Tasks>.Update.Set(x => x.DateCompletion,DateTime.Now)

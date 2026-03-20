@@ -17,8 +17,8 @@ namespace TaskManagerConsole.Api.Models
 
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        [BsonElement("_id")]
-        public ObjectId ObjectId { get; init; }
+        public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
+
         [JsonInclude]
         public string Name { get; init; }
         

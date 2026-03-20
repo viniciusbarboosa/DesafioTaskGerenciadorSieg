@@ -9,7 +9,7 @@ namespace TaskManagerConsole.Api.Repository.Interfaces.Generic.Interface
         public List<T> Get(string collection);
         public T GetByName(string name, string collection);
         public T GetById(string id, string collection);
-        public void Delete(ObjectId id, string collection);
+        public void Delete(string id, string collection);
         public void Create(T typeClass, string collection);
 
     }

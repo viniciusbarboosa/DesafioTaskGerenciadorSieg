@@ -33,7 +33,7 @@ namespace TaskManagerConsole.Api.Repository
         public User GetUserById(string id)
         {
             var usuarioConnection = _dbContext.GetCollection<User>("User");
-            var filter = Builders<User>.Filter.Eq(i => i.ObjectId,new ObjectId(id));
+            var filter = Builders<User>.Filter.Eq(i => i.Id,id);
             User user = usuarioConnection.Find(filter).FirstOrDefault();
             return user;
         }

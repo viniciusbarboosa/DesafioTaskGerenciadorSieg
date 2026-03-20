@@ -35,7 +35,7 @@ namespace TaskManagerConsole.Api.Repository.Interfaces.Generic
         public T GetById(string id,string collection)
         {
             var connection = _dbContext.GetCollection<T>(collection);
-            var filter = Builders<T>.Filter.Eq(i => i.ObjectId, new ObjectId(id));
+            var filter = Builders<T>.Filter.Eq(i => i.Id, id);
             T typeClass = connection.Find(filter).FirstOrDefault();
             return typeClass;
         }
@@ -46,10 +46,10 @@ namespace TaskManagerConsole.Api.Repository.Interfaces.Generic
             connection.InsertOne(type);
         }
 
-        public void Delete(ObjectId id,string collection)
+        public void Delete(string id,string collection)
         {
             var connection = _dbContext.GetCollection<T>(collection);
-            var filter = Builders<T>.Filter.Eq(i => i.ObjectId, id);
+            var filter = Builders<T>.Filter.Eq(i => i.Id, id);
             connection.DeleteOne(filter);
         }
 

@@ -167,7 +167,7 @@ namespace TaskManagerConsole.Api.Services
                 throw new Exception("Tarefa com esse id não existe então nao e possiveel excluir");
             }
 
-            _tasksRepository.CompleteTasks(new ObjectId(idTask));
+            _tasksRepository.CompleteTasks(idTask);
         }
 
         public List<Tasks> ListTaskCategory(string idCategory)

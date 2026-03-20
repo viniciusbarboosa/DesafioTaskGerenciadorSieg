@@ -8,7 +8,7 @@ namespace TaskManagerConsole.Api.DTOs.Tasks
 
     public class TaskPopulatedDto : TaskManagerConsole.Api.Models.Tasks
     {
-        public string ObjectIdStr => ObjectId.ToString();
+        public string ObjectIdStr => Id.ToString();
         public string IdCategoryStr => IdCategory.ToString();
         public string IdUserStr => IdUser.ToString();
 
