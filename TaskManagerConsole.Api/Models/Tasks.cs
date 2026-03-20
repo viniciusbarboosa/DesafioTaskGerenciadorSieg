@@ -30,9 +30,9 @@ namespace TaskManagerConsole.Api.Models
         public DateTime DateCreation { get; private set; }
         public StatusTask Status { get; private set; }
         [BsonRepresentation(BsonType.ObjectId)]
-        public string IdCategory { get; set; } = ObjectId.GenerateNewId().ToString();
+        public string IdCategory { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
-        public string IdUser { get; set; } = ObjectId.GenerateNewId().ToString();
+        public string IdUser { get; set; }
 
         public void AtualizarTask(string title,string description,DateTime dateDue,StatusTask status,string idCategory,string idUser)
         {
