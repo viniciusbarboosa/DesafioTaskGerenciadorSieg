@@ -51,7 +51,7 @@ namespace TaskManagerConsole.Api.Repository
                     tp => tp.CategoryDetails 
                 )
                 .Lookup<TaskPopulatedDto, User, TaskPopulatedDto>(
-                    _dbContext.GetCollection<User>("Users"),
+                    _dbContext.GetCollection<User>("User"),
                     tp => tp.IdUser,        
                     u => u.ObjectId,        
                     tp => tp.UserDetails   
