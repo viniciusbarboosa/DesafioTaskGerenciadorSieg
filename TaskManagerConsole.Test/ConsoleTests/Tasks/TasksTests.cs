@@ -92,7 +92,7 @@ public class TasksTests
         Console.SetOut(output);
 
         List<TaskManagerConsole.Entities.Tasks> tasks = new List<TaskManagerConsole.Entities.Tasks>(){
-            new TaskManagerConsole.Entities.Tasks("Titulo","Desc",DateTime.Now.AddDays(1),"Cat","User",TaskManagerConsole.Entities.Types.StatusTask.Pendente)
+            new TaskManagerConsole.Entities.Tasks("Titulo","TesteDesc",DateTime.Now.AddDays(1),"Programação","Vinicius",TaskManagerConsole.Entities.Types.StatusTask.Pendente)
         };
 
         _taskRepository.Setup(x => x.Get()).Returns(tasks);
@@ -100,6 +100,19 @@ public class TasksTests
         _taskService.DeleteTask();
 
         _taskRepository.Verify(r => r.Update(It.IsAny<List<TaskManagerConsole.Entities.Tasks>>()), Times.Once);
+    }
+
+    [Test]
+    public async Task ListTask()
+    {
+
+        List<TaskManagerConsole.Entities.Tasks> tasks = new List<TaskManagerConsole.Entities.Tasks>(){
+            new TaskManagerConsole.Entities.Tasks("Titulo","TesteDesc",DateTime.Now.AddDays(1),"Programação","Vinicius",TaskManagerConsole.Entities.Types.StatusTask.Pendente)
+        };
+
+        _taskRepository.Setup(r => r.Get()).Returns(tasks);
+        _taskService.GetTask();
+        _taskRepository.Verify(r => r.Get(),Times.Once);
     }
 
 }
