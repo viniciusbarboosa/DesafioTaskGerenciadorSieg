@@ -7,6 +7,7 @@ namespace TaskManagerConsole.Test;
 
 public class TasksTests
 {
+    //FOQUEi no create se nao tiver category e no delete
     private Mock<IRepository<TaskManagerConsole.Entities.User>> _userRepository;
     private Mock<IRepository<TaskManagerConsole.Entities.Category>> _categoryRepository;
     private Mock<IRepository<TaskManagerConsole.Entities.Tasks>> _taskRepository;
@@ -54,5 +55,51 @@ public class TasksTests
         _taskRepository.Verify(r => r.Create(It.IsAny< TaskManagerConsole.Entities.Tasks>()), Times.Once);
     }
 
+    [Test]
+    public void CreateTaskErroCategory()
+    {
+        var inputs = new StringWriter();
+        var reader = new StringReader(inputs.ToString());
+        Console.SetIn(reader);
+
+        var output = new StringWriter();
+        Console.SetOut(output);
+
+        List<TaskManagerConsole.Entities.Category> listCategory = new List<TaskManagerConsole.Entities.Category>();
+        List<TaskManagerConsole.Entities.User> listUser = new List<TaskManagerConsole.Entities.User>()
+    {
+        new TaskManagerConsole.Entities.User("teste","tete@gmail")
+    };
+
+        _categoryRepository.Setup(x => x.Get()).Returns(listCategory);
+        _userRepository.Setup(x => x.Get()).Returns(listUser);
+
+        _taskService.CreateTask();
+
+        _taskRepository.Verify(r => r.Create(It.IsAny<TaskManagerConsole.Entities.Tasks>()), Times.Never);
+    }
+
+    [Test]
+    public void DeleteTaskSuccess()
+    {
+        var inputs = new StringWriter();
+        inputs.WriteLine("0");
+
+        var reader = new StringReader(inputs.ToString());
+        Console.SetIn(reader);
+
+        var output = new StringWriter();
+        Console.SetOut(output);
+
+        List<TaskManagerConsole.Entities.Tasks> tasks = new List<TaskManagerConsole.Entities.Tasks>(){
+            new TaskManagerConsole.Entities.Tasks("Titulo","Desc",DateTime.Now.AddDays(1),"Cat","User",TaskManagerConsole.Entities.Types.StatusTask.Pendente)
+        };
+
+        _taskRepository.Setup(x => x.Get()).Returns(tasks);
+
+        _taskService.DeleteTask();
+
+        _taskRepository.Verify(r => r.Update(It.IsAny<List<TaskManagerConsole.Entities.Tasks>>()), Times.Once);
+    }
 
 }
